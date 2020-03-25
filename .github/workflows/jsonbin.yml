@@ -18,8 +18,12 @@ jobs:
       - name: Be sure that it returns bin_id
         run: echo "Bin ID = ${{ steps.jsonbin_create.outputs.bin_id }}"
       - name: Call URL that was returned
-        run: |
-          curl -i -H "secret-key: ${{ secrets.API_KEY }}" ${{ steps.jsonbin_create.outputs.url }} | echo
+        uses: fjogeleit/http-request-action@v1.1.0
+        id: http1
+        with:
+          url: '${{ steps.jsonbin_create.outputs.url }}'
+          method: 'GET'
+          customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Be sure that response is valid
         run: echo "${{ steps.http1.outputs.response }}"
       - name: Update bin
@@ -31,11 +35,12 @@ jobs:
           bin_id: '${{ steps.jsonbin_create.outputs.bin_id }}'
           api_key: ${{ secrets.API_KEY }}
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@master
+        uses: fjogeleit/http-request-action@v1.1.0
         id: http2
         with:
           url: '${{ steps.jsonbin_update.outputs.url }}'
           method: 'GET'
+          customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Be sure that response is valid
         run: echo "${{ steps.http2.outputs.response }}"
       - name: Delete bin
@@ -46,10 +51,11 @@ jobs:
           method: 'DELETE'
           api_key: ${{ secrets.API_KEY }}
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@master
+        uses: fjogeleit/http-request-action@v1.1.0
         id: http3
         with:
           url: '${{ steps.jsonbin_delete.outputs.url }}'
           method: 'GET'
+          customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Be sure that URL does not exist
         run: echo "${{ steps.http3.outputs.response }}"
