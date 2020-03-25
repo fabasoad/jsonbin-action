@@ -7,7 +7,7 @@ module.exports = {
     return got.post(URL, {
       body: body,
       headers: {
-        'apiKey': apiKey
+        'secret-key': apiKey
       }
     }).then(({ success, id }) => {
       if (success) {
@@ -24,7 +24,7 @@ module.exports = {
     return got.put(URL + binId, {
       body: body,
       headers: {
-        'apiKey': apiKey
+        'secret-key': apiKey
       }
     }).then(({ success, parentId }) => {
       if (success) {
@@ -40,7 +40,7 @@ module.exports = {
   delete: (apiKey, binId) => {
     return got.delete(URL + binId, {
       headers: {
-        'apiKey': apiKey
+        'secret-key': apiKey
       }
     }).then(({ success, id }) => {
       if (success) {
