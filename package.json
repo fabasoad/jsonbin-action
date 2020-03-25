@@ -1,0 +1,30 @@
+{
+  "name": "jsonbin-action",
+  "version": "1.0.0",
+  "description": "This action allows to generate custom HTTP responses using JSONbin service.",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabasoad/jsonbin-action.git"
+  },
+  "keywords": [
+    "actions",
+    "http",
+    "mock",
+    "rest",
+    "json"
+  ],
+  "author": "Yevhen Fabizhevskyi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fabasoad/jsonbin-action/issues"
+  },
+  "homepage": "https://github.com/fabasoad/jsonbin-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.3",
+    "got": "^10.6.0"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.1"
+  }
+}

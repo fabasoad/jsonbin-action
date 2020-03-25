@@ -1,0 +1,29 @@
+---
+name: 'JSONbin'
+description: 'This action allows to generate custom HTTP responses using JSONbin service.'
+# branding:
+#   icon: voicemail
+#   color: white
+inputs:
+  api_key:
+    description: 'JSONbin API Key.'
+    required: true
+  body:
+    description: 'Body to send in JSON format.'
+    required: true
+  method:
+    description: 'Type of response that you want to send. Possible values are CREATE, UPDATE, DELETE. Default is CREATE.'
+    required: false
+    default: CREATE
+  bin_id:
+    description: 'In case you want to UPDATE or DELETE bin.'
+    required: false
+    default: null
+outputs:
+  bin_id:
+    description: 'ID of a bin that has been created, updated or deleted.'
+  url:
+    description: 'Access URL to a bin.'
+runs:
+  using: 'node12'
+  main: 'src/index.js'
