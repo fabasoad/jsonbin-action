@@ -8,7 +8,7 @@
     "url": "git+https://github.com/fabasoad/jsonbin-action.git"
   },
   "scripts": {
-    "test": "mocha __tests__"
+    "test": "mocha --timeout 5000 __tests__"
   },
   "keywords": [
     "actions",

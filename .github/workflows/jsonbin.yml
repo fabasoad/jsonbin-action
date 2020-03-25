@@ -23,6 +23,7 @@ jobs:
         with:
           url: '${{ steps.jsonbin_create.outputs.url }}'
           method: 'GET'
+          api_key: ${{ secrets.API_KEY }}
       - name: Be sure that response is valid
         run: echo "${{ steps.http1.outputs.response }}"
       - name: Update bin
