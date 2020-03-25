@@ -18,12 +18,8 @@ jobs:
       - name: Be sure that it returns bin_id
         run: echo "Bin ID = ${{ steps.jsonbin_create.outputs.bin_id }}"
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@master
-        id: http1
-        with:
-          url: '${{ steps.jsonbin_create.outputs.url }}'
-          method: 'GET'
-          api_key: ${{ secrets.API_KEY }}
+        run: |
+          curl -i -H "secret-key: ${{ secrets.API_KEY }}" ${{ steps.jsonbin_create.outputs.url }} | echo
       - name: Be sure that response is valid
         run: echo "${{ steps.http1.outputs.response }}"
       - name: Update bin
