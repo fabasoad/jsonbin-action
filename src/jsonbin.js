@@ -10,7 +10,8 @@ module.exports = {
         'secret-key': apiKey,
         'Content-Type': 'application/json'
       }
-    }).then(({ success, id }) => {
+    }).then(({ body }) => {
+      const { success, id } = JSON.parse(body);
       if (success) {
         return {
           url: URL + id,
@@ -26,9 +27,11 @@ module.exports = {
       body: body,
       headers: {
         'secret-key': apiKey,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'versioning': false
       }
-    }).then(({ success, parentId }) => {
+    }).then(({ body }) => {
+      const { success, parentId } = JSON.parse(body);
       if (success) {
         return {
           url: URL + parentId,
@@ -44,7 +47,8 @@ module.exports = {
       headers: {
         'secret-key': apiKey
       }
-    }).then(({ success, id }) => {
+    }).then(({ body }) => {
+      const { success, id } = JSON.parse(body);
       if (success) {
         return {
           url: URL + id,

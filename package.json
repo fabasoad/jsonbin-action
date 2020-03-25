@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/fabasoad/jsonbin-action.git"
   },
+  "scripts": {
+    "test": "mocha __tests__"
+  },
   "keywords": [
     "actions",
     "http",
@@ -25,6 +28,8 @@
     "got": "^10.6.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "dotenv": "^8.2.0",
     "mocha": "^7.1.1"
   }
 }

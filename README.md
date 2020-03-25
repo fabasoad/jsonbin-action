@@ -32,47 +32,15 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: fabasoad/jsonbin-action@v1.0.0
-        id: jsonbin1
+        id: jsonbin
         with:
           body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'
           method: 'CREATE'
           api_key: ${{ secrets.API_KEY }}
       - name: Check bin_id
-        run: echo "Bin ID = ${{ steps.jsonbin1.outputs.bin_id }}"
-      - uses: fjogeleit/http-request-action@master
-        id: http1
-        with:
-          url: '${{ steps.jsonbin1.outputs.url }}'
-          method: 'GET'
-      - name: Check response
-        run: echo "${{ steps.http1.outputs.response }}"
-      - uses: fabasoad/jsonbin-action@v1.0.0
-        id: jsonbin2
-        with:
-          body: '{"workflow": "${{ github.workflow }}-updated", "author": "${{ github.actor }}-updated", "number": "${{ github.run_number }}-updated"}'
-          method: 'UPDATE'
-          bin_id: '${{ steps.jsonbin1.outputs.bin_id }}'
-          api_key: ${{ secrets.API_KEY }}
-      - uses: fjogeleit/http-request-action@master
-        id: http2
-        with:
-          url: '${{ steps.jsonbin2.outputs.url }}'
-          method: 'GET'
-      - name: Check response
-        run: echo "${{ steps.http2.outputs.response }}"
-      - uses: fabasoad/jsonbin-action@v1.0.0
-        id: jsonbin3
-        with:
-          bin_id: '${{ steps.jsonbin2.outputs.bin_id }}'
-          method: 'DELETE'
-          api_key: ${{ secrets.API_KEY }}
-      - uses: fjogeleit/http-request-action@master
-        id: http3
-        with:
-          url: '${{ steps.jsonbin3.outputs.url }}'
-          method: 'GET'
-      - name: Check response
-        run: echo "${{ steps.http3.outputs.response }}"
+        run: |
+          echo "Bin ID = ${{ steps.jsonbin.outputs.bin_id }}"
+          echo "URL = ${{ steps.jsonbin.outputs.url }}"
 ```
 
 ### Result
