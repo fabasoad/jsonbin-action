@@ -25,7 +25,7 @@ jobs:
           method: 'GET'
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Be sure that response is valid
-        run: echo "${{ steps.http1.outputs.response }}"
+        run: printf '${{ steps.http1.outputs.response }}'
       - name: Update bin
         uses: ./
         id: jsonbin_update
@@ -42,7 +42,7 @@ jobs:
           method: 'GET'
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Be sure that response is valid
-        run: echo "${{ steps.http2.outputs.response }}"
+        run: printf '${{ steps.http2.outputs.response }}'
       - name: Delete bin
         uses: ./
         id: jsonbin_delete
@@ -58,4 +58,4 @@ jobs:
           method: 'GET'
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Be sure that URL does not exist
-        run: echo "${{ steps.http3.outputs.response }}"
+        run: printf '${{ steps.http3.outputs.response }}'
