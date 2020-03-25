@@ -5,9 +5,10 @@ const URL = 'https://api.jsonbin.io/b/';
 module.exports = {
   create: (apiKey, body) => {
     return got.post(URL, {
-      body: body,
+      body: JSON.stringify(body),
       headers: {
-        'secret-key': apiKey
+        'secret-key': apiKey,
+        'Content-Type': 'application/json'
       }
     }).then(({ success, id }) => {
       if (success) {
@@ -22,9 +23,10 @@ module.exports = {
   },
   update: (apiKey, binId, body) => {
     return got.put(URL + binId, {
-      body: body,
+      body: JSON.stringify(body),
       headers: {
-        'secret-key': apiKey
+        'secret-key': apiKey,
+        'Content-Type': 'application/json'
       }
     }).then(({ success, parentId }) => {
       if (success) {
