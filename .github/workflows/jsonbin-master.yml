@@ -1,4 +1,4 @@
-name: JSONbin (latest)
+name: JSONbin (master)
 
 on: push
 
@@ -15,7 +15,7 @@ jobs:
           body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'
           method: 'CREATE'
           api_key: ${{ secrets.API_KEY }}
-      - name: Be sure that it returns bin_id
+      - name: Print bin_id
         run: echo "Bin ID = ${{ steps.jsonbin_create.outputs.bin_id }}"
       - name: Call URL that was returned
         uses: fjogeleit/http-request-action@v1.1.0
@@ -24,7 +24,7 @@ jobs:
           url: '${{ steps.jsonbin_create.outputs.url }}'
           method: 'GET'
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
-      - name: Be sure that response is valid
+      - name: Print response
         run: printf '${{ steps.http1.outputs.response }}'
       - name: Update bin
         uses: ./
@@ -41,7 +41,7 @@ jobs:
           url: '${{ steps.jsonbin_update.outputs.url }}'
           method: 'GET'
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
-      - name: Be sure that response is valid
+      - name: Print response
         run: printf '${{ steps.http2.outputs.response }}'
       - name: Delete bin
         uses: ./
@@ -50,12 +50,3 @@ jobs:
           bin_id: '${{ steps.jsonbin_update.outputs.bin_id }}'
           method: 'DELETE'
           api_key: ${{ secrets.API_KEY }}
-      - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.1.0
-        id: http3
-        with:
-          url: '${{ steps.jsonbin_delete.outputs.url }}'
-          method: 'GET'
-          customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
-      - name: Be sure that URL does not exist
-        run: printf '${{ steps.http3.outputs.response }}'

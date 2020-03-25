@@ -1,9 +1,9 @@
 ---
-name: 'JSONbin'
+name: 'JSONbin Action'
 description: 'This action allows to generate custom HTTP responses using JSONbin service.'
-# branding:
-#   icon: voicemail
-#   color: white
+branding:
+  icon: trash
+  color: blue
 inputs:
   api_key:
     description: 'JSONbin API Key.'
