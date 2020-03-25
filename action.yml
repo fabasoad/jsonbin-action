@@ -9,8 +9,9 @@ inputs:
     description: 'JSONbin API Key.'
     required: true
   body:
-    description: 'Body to send in JSON format.'
-    required: true
+    description: 'Body to send in JSON format. In case you want to CREATE or UPDATE bin.'
+    required: false
+    default: null
   method:
     description: 'Type of response that you want to send. Possible values are CREATE, UPDATE, DELETE. Default is CREATE.'
     required: false
