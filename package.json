@@ -1,6 +1,6 @@
 {
   "name": "jsonbin-action",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This action allows to generate custom HTTP responses using JSONbin service.",
   "main": "dist/index.js",
   "repository": {

@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Technical information (please complete the following information):**
  - OS: [e.g. MacOS]
- - `jsonbin-action` version [e.g. 1.0.0]
+ - `jsonbin-action` version [e.g. 1.0.1]
 
 **Additional context**
 Add any other context about the problem here.
