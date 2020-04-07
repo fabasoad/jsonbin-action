@@ -7,9 +7,9 @@ jobs:
     name: Test JSONbin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2.1.0
       - name: Create bin
-        uses: fabasoad/jsonbin-action@v1.0.0
+        uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_create
         with:
           body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'
@@ -27,7 +27,7 @@ jobs:
       - name: Print response
         run: printf '${{ steps.http1.outputs.response }}'
       - name: Update bin
-        uses: fabasoad/jsonbin-action@v1.0.0
+        uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_update
         with:
           body: '{"workflow": "${{ github.workflow }}-updated", "author": "${{ github.actor }}-updated", "number": "${{ github.run_number }}-updated"}'
@@ -44,7 +44,7 @@ jobs:
       - name: Print response
         run: printf '${{ steps.http2.outputs.response }}'
       - name: Delete bin
-        uses: fabasoad/jsonbin-action@v1.0.0
+        uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_delete
         with:
           bin_id: '${{ steps.jsonbin_update.outputs.bin_id }}'
