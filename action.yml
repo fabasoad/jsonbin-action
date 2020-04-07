@@ -27,4 +27,4 @@ outputs:
     description: 'Access URL to a bin.'
 runs:
   using: 'node12'
-  main: 'src/index.js'
+  main: 'dist/index.js'
