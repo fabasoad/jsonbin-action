@@ -1,0 +1,21 @@
+---
+name: JSONbin
+
+on: push
+
+jobs:
+  jsonbin:
+    name: Test JSONbin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: fabasoad/jsonbin-action@v1.0.1
+        id: jsonbin
+        with:
+          body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'
+          method: 'CREATE'
+          api_key: ${{ secrets.API_KEY }}
+      - name: Check bin_id
+        run: |
+          echo "Bin ID = ${{ steps.jsonbin.outputs.bin_id }}"
+          echo "URL = ${{ steps.jsonbin.outputs.url }}"
