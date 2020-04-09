@@ -8,6 +8,7 @@
     "url": "git+https://github.com/fabasoad/jsonbin-action.git"
   },
   "scripts": {
+    "build": "ncc build -m src/index.js",
     "test": "mocha --timeout 5000 __tests__"
   },
   "keywords": [
@@ -28,6 +29,7 @@
     "got": "^10.7.0"
   },
   "devDependencies": {
+    "@zeit/ncc": "^0.22.1",
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
     "mocha": "^7.1.1"
