@@ -1,5 +1,6 @@
 ---
 name: 'JSONbin Action'
+author: Yevhen Fabizhevskyi
 description: 'This action allows to generate custom HTTP responses using JSONbin service.'
 branding:
   icon: trash
