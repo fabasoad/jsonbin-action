@@ -48,7 +48,7 @@ jobs:
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Validate response
         run: |
-          [[ "${{ steps.http1.outputs.response }}" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
+          [[ '${{ steps.http1.outputs.response }}' == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
       - name: Update bin
         uses: ./
         id: jsonbin_update
@@ -66,7 +66,7 @@ jobs:
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Validate response
         run: |
-          [[ "${{ steps.http2.outputs.response }}" == '{"author":"${{ github.actor }}"}' ]] || exit 1;
+          [[ '${{ steps.http2.outputs.response }}' == '{"author":"${{ github.actor }}"}' ]] || exit 1;
       - name: Delete bin
         uses: ./
         id: jsonbin_delete
