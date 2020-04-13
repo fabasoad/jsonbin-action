@@ -36,7 +36,7 @@ jobs:
           api_key: ${{ secrets.API_KEY }}
       - name: Validate output
         run: |
-          ${#"${{ steps.jsonbin_create.outputs.bin_id }}"} > 0 || exit 1;
+          $(echo -n "${{ steps.jsonbin_create.outputs.bin_id }}" | wc -m) != 0 || exit 1;
           ${{ steps.jsonbin_create.outputs.url }} | grep -q "https://api.jsonbin.io/b/${{ steps.jsonbin_create.outputs.bin_id }}" || exit 1;
       - name: Call URL that was returned
         uses: fjogeleit/http-request-action@v1.1.0
