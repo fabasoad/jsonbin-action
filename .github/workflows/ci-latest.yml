@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.1.0
       - name: Create bin
-        uses: fabasoad/jsonbin-action@${{ github.ref }}
+        uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_create
         with:
           body: '{"running_by":"${{ github.actor }}"}'
@@ -49,7 +49,7 @@ jobs:
         run: |
           [[ '${{ steps.http1.outputs.response }}' == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
       - name: Update bin
-        uses: fabasoad/jsonbin-action@${{ github.ref }}
+        uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_update
         with:
           body: '{"author":"${{ github.actor }}"}'
@@ -67,7 +67,7 @@ jobs:
         run: |
           [[ '${{ steps.http2.outputs.response }}' == '{"author":"${{ github.actor }}"}' ]] || exit 1;
       - name: Delete bin
-        uses: fabasoad/jsonbin-action@${{ github.ref }}
+        uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_delete
         with:
           bin_id: '${{ steps.jsonbin_update.outputs.bin_id }}'
