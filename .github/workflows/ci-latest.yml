@@ -46,7 +46,8 @@ jobs:
           method: 'GET'
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Validate response
-        run: ${{ steps.http1.outputs.response }} | grep -q '{"running_by":"${{ github.actor }}"}' || exit 1;
+        run: |
+          [[ "${{ steps.http1.outputs.response }}" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
       - name: Update bin
         uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_update
@@ -63,7 +64,8 @@ jobs:
           method: 'GET'
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
       - name: Validate response
-        run: ${{ steps.http2.outputs.response }} | grep -q '{"author":"${{ github.actor }}"}' || exit 1;
+        run: |
+          [[ "${{ steps.http2.outputs.response }}" == '{"author":"${{ github.actor }}"}' ]] || exit 1;
       - name: Delete bin
         uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_delete
@@ -72,4 +74,5 @@ jobs:
           method: 'DELETE'
           api_key: ${{ secrets.API_KEY }}
       - name: Validate URL does not exist
-        run: curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin_update.outputs.url }} | grep -q 404 || exit 1;
+        run: |
+          [[ $(curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin_update.outputs.url }}) -eq 404 ]] || exit 1;
