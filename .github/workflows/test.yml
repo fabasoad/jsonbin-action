@@ -8,8 +8,9 @@ jobs:
     name: Test JSONbin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: fabasoad/jsonbin-action@v1.0.1
+      - uses: actions/checkout@v2.1.0
+      - name: Run fabasoad/jsonbin-action@master
+        uses: ./
         id: jsonbin
         with:
           body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'

@@ -1,5 +1,5 @@
 # JSONbin
-![](https://img.shields.io/github/v/release/fabasoad/jsonbin-action?include_prereleases) ![CI](https://github.com/fabasoad/jsonbin-action/workflows/CI/badge.svg) ![JSONbin (latest)](https://github.com/fabasoad/jsonbin-action/workflows/JSONbin%20(latest)/badge.svg) ![JSONbin (master)](https://github.com/fabasoad/jsonbin-action/workflows/JSONbin%20(master)/badge.svg) ![YAML Lint](https://github.com/fabasoad/jsonbin-action/workflows/YAML%20Lint/badge.svg) [![Total alerts](https://img.shields.io/lgtm/alerts/g/fabasoad/jsonbin-action.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fabasoad/jsonbin-action/alerts/) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/fabasoad/jsonbin-action.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fabasoad/jsonbin-action/context:javascript) [![Maintainability](https://api.codeclimate.com/v1/badges/4fc4a9e5af837a8ce6a9/maintainability)](https://codeclimate.com/github/fabasoad/jsonbin-action/maintainability) [![Known Vulnerabilities](https://snyk.io/test/github/fabasoad/translation-action/badge.svg?targetFile=package.json)](https://snyk.io/test/github/fabasoad/translation-action?targetFile=package.json)
+![](https://img.shields.io/github/v/release/fabasoad/jsonbin-action?include_prereleases) ![CI (latest)](https://github.com/fabasoad/jsonbin-action/workflows/CI%20(latest)/badge.svg) ![CI (master)](https://github.com/fabasoad/jsonbin-action/workflows/CI%20(master)/badge.svg) ![YAML Lint](https://github.com/fabasoad/jsonbin-action/workflows/YAML%20Lint/badge.svg) [![Total alerts](https://img.shields.io/lgtm/alerts/g/fabasoad/jsonbin-action.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fabasoad/jsonbin-action/alerts/) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/fabasoad/jsonbin-action.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/fabasoad/jsonbin-action/context:javascript) [![Maintainability](https://api.codeclimate.com/v1/badges/4fc4a9e5af837a8ce6a9/maintainability)](https://codeclimate.com/github/fabasoad/jsonbin-action/maintainability) [![Known Vulnerabilities](https://snyk.io/test/github/fabasoad/translation-action/badge.svg?targetFile=package.json)](https://snyk.io/test/github/fabasoad/translation-action?targetFile=package.json)
 
 This action allows to generate custom HTTP responses using [JSONbin.io](https://jsonbin.io).
 
@@ -15,8 +15,10 @@ Sign up to [JSONbin](https://jsonbin.io) official web page. Then go to [API Keys
 | bin_id  | No       | In case you want to UPDATE or DELETE bin.                                                              | null    | <string>               |
 
 ## Outputs
-1. `bin_id` - ID of a bin that has been created, updated or deleted.
-2. `url` - Access URL to a bin.
+| Name   | Required | Description                                           |
+|--------|----------|-------------------------------------------------------|
+| bin_id | Yes      | ID of a bin that has been created, updated or deleted |
+| url    | Yes      | Access URL to a bin                                   |
 
 ## Example usage
 
@@ -32,8 +34,8 @@ jobs:
     name: Test JSONbin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: fabasoad/jsonbin-action@v1.0.0
+      - uses: actions/checkout@v2.1.0
+      - uses: fabasoad/jsonbin-action@master
         id: jsonbin
         with:
           body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'

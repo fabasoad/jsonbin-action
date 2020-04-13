@@ -1,10 +1,29 @@
-name: JSONbin (latest)
+---
+name: CI (latest)
 
-on: push
+on:
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
-  jsonbin:
-    name: Test JSONbin
+  unit_tests:
+    name: Unit tests
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.1.0
+        with:
+          ref: 'v1.0.1'
+      - uses: Adzz/jest_test_action@v1.0.0
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+        with:
+          package-manager: npm
+          command: test
+  functional_tests:
+    name: Functional tests
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.1.0
@@ -12,11 +31,13 @@ jobs:
         uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_create
         with:
-          body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'
+          body: '{"running_by":"${{ github.actor }}"}'
           method: 'CREATE'
           api_key: ${{ secrets.API_KEY }}
-      - name: Print bin_id
-        run: echo "Bin ID = ${{ steps.jsonbin_create.outputs.bin_id }}"
+      - name: Validate output
+        run: |
+          ${#"${{ steps.jsonbin_create.outputs.bin_id }}"} > 0 || exit 1;
+          ${{ steps.jsonbin_create.outputs.url }} | grep -q "https://api.jsonbin.io/b/${{ steps.jsonbin_create.outputs.bin_id }}" || exit 1;
       - name: Call URL that was returned
         uses: fjogeleit/http-request-action@v1.1.0
         id: http1
@@ -24,13 +45,13 @@ jobs:
           url: '${{ steps.jsonbin_create.outputs.url }}'
           method: 'GET'
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
-      - name: Print response
-        run: printf '${{ steps.http1.outputs.response }}'
+      - name: Validate response
+        run: ${{ steps.http1.outputs.response }} | grep -q '{"running_by":"${{ github.actor }}"}' || exit 1;
       - name: Update bin
         uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_update
         with:
-          body: '{"workflow": "${{ github.workflow }}-updated", "author": "${{ github.actor }}-updated", "number": "${{ github.run_number }}-updated"}'
+          body: '{"author":"${{ github.actor }}"}'
           method: 'UPDATE'
           bin_id: '${{ steps.jsonbin_create.outputs.bin_id }}'
           api_key: ${{ secrets.API_KEY }}
@@ -41,8 +62,8 @@ jobs:
           url: '${{ steps.jsonbin_update.outputs.url }}'
           method: 'GET'
           customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
-      - name: Print response
-        run: printf '${{ steps.http2.outputs.response }}'
+      - name: Validate response
+        run: ${{ steps.http2.outputs.response }} | grep -q '{"author":"${{ github.actor }}"}' || exit 1;
       - name: Delete bin
         uses: fabasoad/jsonbin-action@v1.0.1
         id: jsonbin_delete
@@ -50,3 +71,5 @@ jobs:
           bin_id: '${{ steps.jsonbin_update.outputs.bin_id }}'
           method: 'DELETE'
           api_key: ${{ secrets.API_KEY }}
+      - name: Validate URL does not exist
+        run: curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin_update.outputs.url }} | grep -q 404 || exit 1;
