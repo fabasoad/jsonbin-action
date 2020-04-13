@@ -38,7 +38,7 @@ jobs:
       - name: Validate output
         run: |
           [[ $(expr length "${{ steps.jsonbin_create.outputs.bin_id }}") -eq 0 ]] && exit 1;
-          ${{ steps.jsonbin_create.outputs.url }} | grep -q "https://api.jsonbin.io/b/${{ steps.jsonbin_create.outputs.bin_id }}" || exit 1;
+          [[ "${{ steps.jsonbin_create.outputs.url }}" -eq "https://api.jsonbin.io/b/${{ steps.jsonbin_create.outputs.bin_id }}" ]] || exit 1;
       - name: Call URL that was returned
         uses: fjogeleit/http-request-action@v1.1.0
         id: http1
