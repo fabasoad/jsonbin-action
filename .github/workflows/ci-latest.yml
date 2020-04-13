@@ -1,10 +1,10 @@
 ---
 name: CI (latest)
 
-on:
-  push:
-    tags:
-      - 'v*.*.*'
+on: push
+  # push:
+  #   tags:
+  #     - 'v*.*.*'
 
 jobs:
   unit_tests:
