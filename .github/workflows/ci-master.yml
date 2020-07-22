@@ -1,13 +1,13 @@
 ---
-name: CI (master)
+name: CI (main)
 
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   unit_tests:
@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v2.3.1
       - uses: Adzz/jest_test_action@v1.0.0
         env:
           API_KEY: ${{ secrets.API_KEY }}
@@ -27,7 +27,7 @@ jobs:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v2.3.1
       - name: Create bin
         uses: ./
         id: jsonbin_create
@@ -40,7 +40,7 @@ jobs:
           [[ $(expr length "${{ steps.jsonbin_create.outputs.bin_id }}") -eq 0 ]] && exit 1;
           [[ "${{ steps.jsonbin_create.outputs.url }}" == "https://api.jsonbin.io/b/${{ steps.jsonbin_create.outputs.bin_id }}" ]] || exit 1;
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.1.0
+        uses: fjogeleit/http-request-action@v1.3.3
         id: http1
         with:
           url: '${{ steps.jsonbin_create.outputs.url }}'
@@ -58,7 +58,7 @@ jobs:
           bin_id: '${{ steps.jsonbin_create.outputs.bin_id }}'
           api_key: ${{ secrets.API_KEY }}
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.1.0
+        uses: fjogeleit/http-request-action@v1.3.3
         id: http2
         with:
           url: '${{ steps.jsonbin_update.outputs.url }}'
