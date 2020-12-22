@@ -44,5 +44,12 @@
     "mocha": "8.2.1",
     "nyc": "15.1.0",
     "snyk": "1.437.2"
+  },
+  "snyk": true,
+  "husky": {
+    "hooks": {
+      "pre-commit": "git-branch-is --not main && yarn run build && git add dist/index.js",
+      "pre-push": "yarn run lint && yarn test"
+    }
   }
 }
