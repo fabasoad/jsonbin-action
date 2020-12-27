@@ -1,6 +1,6 @@
 {
   "name": "jsonbin-action",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "This action allows to generate custom HTTP responses using JSONbin service.",
   "main": "dist/index.js",
   "repository": {
@@ -43,7 +43,7 @@
     "husky": "4.3.6",
     "mocha": "8.2.1",
     "nyc": "15.1.0",
-    "snyk": "1.437.2"
+    "snyk": "1.437.3"
   },
   "snyk": true,
   "husky": {
