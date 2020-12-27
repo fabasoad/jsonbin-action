@@ -19,18 +19,21 @@ jobs:
       - name: Get commits since last release
         id: changes
         uses: simbo/changes-since-last-release-action@v1
+      - run: echo "${{ steps.changes.outputs.last-tag }}"
       - name: Get latest version
         uses: bhowell2/github-substring-action@v1.0.0
         id: version
         with:
           value: ${{ steps.changes.outputs.last-tag }}
           length_from_end: 1
+      - run: echo "${{ steps.version.outputs.substring }}"
       - name: Increase version
         id: semver
         uses: matt-FFFFFF/simple-semver@v0.1.0
         with:
           semver-input: ${{ steps.version.outputs.substring }}
           increment: p
+      - run: echo "${{ steps.semver.outputs.semver }}"
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
