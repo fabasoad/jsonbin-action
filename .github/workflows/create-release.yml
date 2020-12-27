@@ -22,18 +22,17 @@ jobs:
       - name: Should be v1.0.3
         run: echo "${{ steps.changes.outputs.last-tag }}"
       - name: Get latest version
-        uses: bhowell2/github-substring-action@v1.0.0
-        id: version
-        with:
-          value: ${{ steps.changes.outputs.last-tag }}
-          length_from_end: 1
+        id: substring
+        run: |
+          ver=$(echo "${{ steps.changes.outputs.last-tag }}" | cut -c2-)
+          echo '::set-output name=version::'$ver
       - name: Should be 1.0.3
-        run: echo "${{ steps.version.outputs.substring }}"
+        run: echo "${{ steps.substring.outputs.version }}"
       - name: Increase version
         id: semver
         uses: matt-FFFFFF/simple-semver@v0.1.0
         with:
-          semver-input: ${{ steps.version.outputs.substring }}
+          semver-input: ${{ steps.substring.outputs.version }}
           increment: p
       - name: Should be 1.0.4
         run: echo "${{ steps.semver.outputs.semver }}"
