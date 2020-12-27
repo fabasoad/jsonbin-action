@@ -8,6 +8,7 @@
     "Autobuild",
     "UNSECURE",
     "appium",
+    "bhowell",
     "codeql",
     "fjogeleit",
     "ibiqlik",
@@ -17,6 +18,8 @@
     "liberapay",
     "linebreak",
     "readonly",
+    "semver",
+    "simbo",
     "vercel",
     "yamllint"
   ],
