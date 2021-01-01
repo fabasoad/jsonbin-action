@@ -1,6 +1,6 @@
 {
   "name": "jsonbin-action",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This action allows to generate custom HTTP responses using JSONbin service.",
   "main": "dist/index.js",
   "repository": {
@@ -9,12 +9,15 @@
   },
   "scripts": {
     "build": "ncc build -m src/index.js",
-    "lint": "eslint src __tests__",
+    "lint:md": "markdownlint --config .markdownlint.yml '**/*.md'",
+    "lint:ts": "eslint src __tests__",
+    "lint": "yarn run lint:md && yarn run lint:ts",
+    "postinstall": "yarn husky install",
+    "prepare": "yarn run snyk-protect",
     "security:auth": "snyk auth",
     "security:test": "snyk test",
-    "test": "nyc mocha --timeout 5000 __tests__",
     "snyk-protect": "snyk protect",
-    "prepublish": "yarn run snyk-protect"
+    "test": "nyc mocha --timeout 5000 __tests__"
   },
   "keywords": [
     "actions",
@@ -40,16 +43,11 @@
     "eslint": "7.16.0",
     "eslint-config-google": "0.14.0",
     "git-branch-is": "4.0.0",
-    "husky": "4.3.6",
+    "husky": "5.0.6",
+    "markdownlint-cli": "0.26.0",
     "mocha": "8.2.1",
     "nyc": "15.1.0",
     "snyk": "1.437.3"
   },
-  "snyk": true,
-  "husky": {
-    "hooks": {
-      "pre-commit": "git-branch-is --not main && yarn run build && git add dist/index.js",
-      "pre-push": "yarn run lint && yarn test"
-    }
-  }
+  "snyk": true
 }
