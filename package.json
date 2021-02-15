@@ -1,6 +1,6 @@
 {
   "name": "jsonbin-action",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "This action allows to generate custom HTTP responses using JSONbin service.",
   "main": "dist/index.js",
   "repository": {
@@ -40,14 +40,14 @@
     "@vercel/ncc": "0.27.0",
     "chai": "4.3.0",
     "dotenv": "8.2.0",
-    "eslint": "7.19.0",
+    "eslint": "7.20.0",
     "eslint-config-google": "0.14.0",
     "git-branch-is": "4.0.0",
-    "husky": "5.0.6",
+    "husky": "5.0.9",
     "markdownlint-cli": "0.26.0",
-    "mocha": "8.2.1",
+    "mocha": "8.3.0",
     "nyc": "15.1.0",
-    "snyk": "1.446.0"
+    "snyk": "1.454.0"
   },
   "snyk": true
 }
