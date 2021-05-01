@@ -6,7 +6,7 @@ on:
     branches:
       - 'main'
       - 'bugfix/**'
-      - 'bump/patch-*'
+      - 'dependabot/*'
       - 'feature/**'
 
 env:
@@ -31,7 +31,7 @@ jobs:
           [[ $(expr length "${{ steps.jsonbin_create.outputs.bin_id }}") -eq 0 ]] && exit 1;
           [[ "${{ steps.jsonbin_create.outputs.url }}" == "https://api.jsonbin.io/b/${{ steps.jsonbin_create.outputs.bin_id }}" ]] || exit 1;
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.7.3
+        uses: fjogeleit/http-request-action@v1.8.0
         id: http1
         with:
           url: '${{ steps.jsonbin_create.outputs.url }}'
@@ -49,7 +49,7 @@ jobs:
           bin_id: '${{ steps.jsonbin_create.outputs.bin_id }}'
           api_key: ${{ secrets.API_KEY }}
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.7.3
+        uses: fjogeleit/http-request-action@v1.8.0
         id: http2
         with:
           url: '${{ steps.jsonbin_update.outputs.url }}'
