@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/fabasoad/jsonbin-action#readme",
   "dependencies": {
-    "@actions/core": "1.4.0",
+    "@actions/core": "1.5.0",
     "got": "11.8.2"
   },
   "devDependencies": {
