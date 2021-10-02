@@ -47,7 +47,7 @@
     "markdownlint-cli": "0.28.1",
     "mocha": "9.1.2",
     "nyc": "15.1.0",
-    "snyk": "1.696.0"
+    "snyk": "1.729.0"
   },
   "snyk": true
 }
