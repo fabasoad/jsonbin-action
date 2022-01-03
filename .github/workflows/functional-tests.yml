@@ -6,7 +6,7 @@ on:
     branches:
       - 'main'
       - 'bugfix/**'
-      - 'dependabot/*'
+      - 'dependabot/**'
       - 'feature/**'
 
 env:
@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v2
       - name: Create bin
         uses: ./
         id: jsonbin_create
