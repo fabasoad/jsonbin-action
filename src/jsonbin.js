@@ -1,62 +1,47 @@
 const got = require('got');
 
-const URL = 'https://api.jsonbin.io/b/';
+const URL = 'https://api.jsonbin.io/v3/b/';
 
 module.exports = {
-  create: (apiKey, body) => {
-    return got.post(URL, {
+  create: async (apiKey, body) => {
+    const { body: respBody } = await got.post(URL, {
       body: body,
       headers: {
-        'secret-key': apiKey,
+        'X-Master-Key': apiKey,
         'Content-Type': 'application/json'
       }
-    }).then(({ body }) => {
-      const { success, id } = JSON.parse(body);
-      if (success) {
-        return {
-          url: URL + id,
-          id: id
-        };
-      } else {
-        throw new Error(`POST ${URL} failed.`);
-      }
     });
+    const { metadata } = JSON.parse(respBody);
+    return {
+      url: URL + metadata.id,
+      id: metadata.id
+    };
   },
-  update: (apiKey, binId, body) => {
-    return got.put(URL + binId, {
+  update: async (apiKey, binId, body) => {
+    const { body: respBody } = await got.put(URL + binId, {
       body: body,
       headers: {
-        'secret-key': apiKey,
+        'X-Master-Key': apiKey,
         'Content-Type': 'application/json',
-        'versioning': false
-      }
-    }).then(({ body }) => {
-      const { success, parentId } = JSON.parse(body);
-      if (success) {
-        return {
-          url: URL + parentId,
-          id: parentId
-        };
-      } else {
-        throw new Error(`PUT ${URL}/${binId} failed.`);
+        'X-Bin-Versioning': false
       }
     });
+    const { metadata } = JSON.parse(respBody);
+    return {
+      url: URL + metadata.parentId,
+      id: metadata.parentId
+    };
   },
-  delete: (apiKey, binId) => {
-    return got.delete(URL + binId, {
+  delete: async (apiKey, binId) => {
+    const { body: respBody } = await got.delete(URL + binId, {
       headers: {
-        'secret-key': apiKey
-      }
-    }).then(({ body }) => {
-      const { success, id } = JSON.parse(body);
-      if (success) {
-        return {
-          url: URL + id,
-          id: id
-        };
-      } else {
-        throw new Error(`DELETE ${URL}/${binId} failed.`);
+        'X-Master-Key': apiKey
       }
     });
+    const { metadata } = JSON.parse(respBody);
+    return {
+      url: URL + metadata.id,
+      id: metadata.id
+    };
   }
 };

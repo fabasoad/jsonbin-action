@@ -4,9 +4,11 @@ const { expect } = require('chai');
 
 const jsonbin = require('../src/jsonbin');
 
-const getBin = (url) => got
-  .get(url, { headers: { 'secret-key': process.env.API_KEY } })
-  .then(({ body }) => JSON.parse(body))
+const getBin = async (url) => {
+  const { body } = await got.get(
+    url, { headers: { 'X-Master-Key': process.env.API_KEY } });
+  return JSON.parse(body);
+}
 
 describe('Test JSONbin client', () => {
   const binToDelete = [];
@@ -20,7 +22,7 @@ describe('Test JSONbin client', () => {
       process.env.API_KEY, JSON.stringify(expected)
     );
     binToDelete.push(resp1.id);
-    const actual1 = await getBin(resp1.url);
+    const { record: actual1 } = await getBin(resp1.url);
     expect(expected).to.deep.equal(actual1);
 
     expected['test'] += 2;
@@ -28,7 +30,7 @@ describe('Test JSONbin client', () => {
     const resp2 = await jsonbin.update(
       process.env.API_KEY, resp1.id, JSON.stringify(expected)
     );
-    const actual2 = await getBin(resp2.url);
+    const { record: actual2 } = await getBin(resp2.url);
     expect(expected).to.deep.equal(actual2);
   });
 
