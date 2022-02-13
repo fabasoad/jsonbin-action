@@ -13,7 +13,7 @@ const getBin = async (url) => {
 describe('Test JSONbin client', () => {
   const binToDelete = [];
 
-  it('CRUD works as expected', async (done) => {
+  it('CRUD works as expected', async () => {
     const expected = {
       'test': 1,
       'value': [3.2, 32.1, 0.01]
@@ -32,13 +32,11 @@ describe('Test JSONbin client', () => {
     );
     const { record: actual2 } = await getBin(resp2.url);
     expect(expected).to.deep.equal(actual2);
-    done();
   });
 
-  after(async (done) => {
+  after(async () => {
     await Promise.all(
       binToDelete.map((id) => jsonbin.delete(process.env.API_KEY, id))
     );
-    done();
   });
 });
