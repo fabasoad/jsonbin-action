@@ -1,13 +1,13 @@
 const got = require('got');
 
-const URL = 'https://api.jsonbin.io/b/';
+const URL = 'https://api.jsonbin.io/v3/b/';
 
 module.exports = {
   create: (apiKey, body) => {
     return got.post(URL, {
       body: body,
       headers: {
-        'secret-key': apiKey,
+        'X-Master-Key': apiKey,
         'Content-Type': 'application/json'
       }
     }).then(({ body }) => {
@@ -26,9 +26,9 @@ module.exports = {
     return got.put(URL + binId, {
       body: body,
       headers: {
-        'secret-key': apiKey,
+        'X-Master-Key': apiKey,
         'Content-Type': 'application/json',
-        'versioning': false
+        'X-Bin-Versioning': false
       }
     }).then(({ body }) => {
       const { success, parentId } = JSON.parse(body);
@@ -45,7 +45,7 @@ module.exports = {
   delete: (apiKey, binId) => {
     return got.delete(URL + binId, {
       headers: {
-        'secret-key': apiKey
+        'X-Master-Key': apiKey
       }
     }).then(({ body }) => {
       const { success, id } = JSON.parse(body);
