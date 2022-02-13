@@ -35,7 +35,7 @@ jobs:
         with:
           url: '${{ steps.jsonbin_create.outputs.url }}'
           method: 'GET'
-          customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
+          customHeaders: '{"X-Master-Key": "${{ secrets.API_KEY }}"}'
       - name: Validate response
         run: |
           [[ '${{ steps.http1.outputs.response }}' == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
@@ -53,7 +53,7 @@ jobs:
         with:
           url: '${{ steps.jsonbin_update.outputs.url }}'
           method: 'GET'
-          customHeaders: '{"secret-key": "${{ secrets.API_KEY }}"}'
+          customHeaders: '{"X-Master-Key": "${{ secrets.API_KEY }}"}'
       - name: Validate response
         run: |
           [[ '${{ steps.http2.outputs.response }}' == '{"author":"${{ github.actor }}"}' ]] || exit 1;
