@@ -8,10 +8,10 @@
     "url": "git+https://github.com/fabasoad/jsonbin-action.git"
   },
   "scripts": {
-    "build": "ncc build -m src/index.js",
-    "lint": "eslint src __tests__",
+    "build": "ncc build -m src/index.ts",
+    "lint": "eslint --ext ts src src/__tests__",
     "postinstall": "pre-commit install --hook-type pre-commit && pre-commit install --hook-type pre-push",
-    "test": "nyc mocha --timeout 5000 __tests__"
+    "test": "jest --config=jest.config.json --coverage"
   },
   "keywords": [
     "actions",
@@ -28,15 +28,20 @@
   "homepage": "https://github.com/fabasoad/jsonbin-action#readme",
   "dependencies": {
     "@actions/core": "1.9.1",
-    "got": "12.3.1"
+    "typed-rest-client": "1.8.9"
   },
   "devDependencies": {
+    "@types/jest": "28.1.7",
+    "@types/node": "18.7.6",
+    "@typescript-eslint/eslint-plugin": "5.33.1",
+    "@typescript-eslint/parser": "5.33.1",
     "@vercel/ncc": "0.34.0",
-    "chai": "4.3.6",
     "dotenv": "16.0.1",
     "eslint": "8.22.0",
     "eslint-config-google": "0.14.0",
-    "mocha": "10.0.0",
-    "nyc": "15.1.0"
+    "jest": "28.1.3",
+    "jest-circus": "28.1.3",
+    "ts-jest": "28.0.8",
+    "typescript": "4.7.4"
   }
 }
