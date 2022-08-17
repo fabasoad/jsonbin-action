@@ -5,12 +5,9 @@ on:
   push:
     branches:
       - 'main'
-      - 'bugfix/**'
-      - 'dependabot/*'
-      - 'feature/**'
-
-env:
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      - 'fix-*'
+      - 'dependabot/**'
+      - 'feature-*'
 
 jobs:
   unit_tests:
@@ -29,7 +26,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Compile
         if: ${{ steps.cache.outputs.cache-hit != 'true' }}
-        run: yarn install
+        run: yarn install --ignore-scripts
       - name: Lint
         run: yarn run lint
       - name: Unit tests
