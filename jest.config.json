@@ -24,7 +24,6 @@
   "testMatch": [
     "**/*.spec.ts"
   ],
-  "testRunner": "jest-circus/runner",
   "testTimeout": 20000,
   "transform": {
     "^.+\\.ts$": "ts-jest"
