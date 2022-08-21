@@ -74,12 +74,11 @@ export default class JsonBinClient {
     const resp = await this.client.create<CreateResponse<T>>('', body)
     if (resp.result == null) {
       throw new JsonBinEmptyResponseError(resp.statusCode)
-    } else if (resp.result?.message != null) {
+    } /*else if (resp.result?.message != null) {
       throw new JsonBinResponseError(resp.statusCode, resp.result.message)
-    }
-    // const binId: string = resp.result.metadata.id || 'unknown'
-    // return { id: binId, url: this.URL + binId }
-    return { id: '', url: this.URL + '' }
+    }*/
+    const binId: string = resp.result.metadata.id || 'unknown'
+    return { id: binId, url: this.URL + binId }
   }
 
   public async update<T>(binId: string, body: T): Promise<JsonBinResponse> {
