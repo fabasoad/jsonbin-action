@@ -106,8 +106,6 @@ export default class JsonBinClient {
     const resp = await this.client.del<DeleteResponse>(binId)
     if (resp.result == null) {
       throw new JsonBinEmptyResponseError(resp.statusCode)
-    } else if (resp.result?.message != null) {
-      throw new JsonBinResponseError(resp.statusCode, resp.result.message)
     }
     const respBinId: string = resp.result.metadata.id || 'unknown'
     return { id: respBinId, url: this.URL + respBinId }
