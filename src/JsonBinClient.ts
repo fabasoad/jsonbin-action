@@ -60,14 +60,14 @@ export default class JsonBinClient {
   }
 
   public async get<T>(binId: string): Promise<T> {
-    // const resp = await this.client.get<GetResponse<T>>(binId)
-    // if (resp.result == null) {
-    //   throw new JsonBinEmptyResponseError(resp.statusCode)
-    // } else if (resp.result?.message != null) {
-    //   throw new JsonBinResponseError(resp.statusCode, resp.result.message)
-    // }
-    // return resp.result.record as T
-    return new Promise(() => null)
+    const resp = await this.client.get<GetResponse<T>>(binId)
+    if (resp.result == null) {
+      throw new JsonBinEmptyResponseError(resp.statusCode)
+    }
+    if (resp.result.message != null) {
+      throw new JsonBinResponseError(resp.statusCode, resp.result.message)
+    }
+    return resp.result.record as T
   }
 
   public async create<T>(body: T): Promise<JsonBinResponse> {
@@ -83,28 +83,27 @@ export default class JsonBinClient {
   }
 
   public async update<T>(binId: string, body: T): Promise<JsonBinResponse> {
-    // const resp = await this.client.replace<ReplaceResponse<T>>(binId, body, {
-    //   additionalHeaders: {
-    //     'X-Bin-Versioning': false
-    //   }
-    // })
-    // if (resp.result == null) {
-    //   throw new JsonBinEmptyResponseError(resp.statusCode)
-    // } else if (resp.result?.message != null) {
-    //   throw new JsonBinResponseError(resp.statusCode, resp.result.message)
-    // }
-    // const parentBinId: string = resp.result.metadata.parentId || 'unknown'
-    // return { id: parentBinId, url: this.URL + parentBinId }
-    return { id: '', url: this.URL + binId }
+    const resp = await this.client.replace<ReplaceResponse<T>>(binId, body, {
+      additionalHeaders: {
+        'X-Bin-Versioning': false
+      }
+    })
+    if (resp.result == null) {
+      throw new JsonBinEmptyResponseError(resp.statusCode)
+    }
+    if (resp.result.message != null) {
+      throw new JsonBinResponseError(resp.statusCode, resp.result.message)
+    }
+    const parentBinId: string = resp.result.metadata.parentId || 'unknown'
+    return { id: parentBinId, url: this.URL + parentBinId }
   }
 
   public async delete(binId: string): Promise<JsonBinResponse> {
-    // const resp = await this.client.del<DeleteResponse>(binId)
-    // if (resp.result == null) {
-    //   throw new JsonBinEmptyResponseError(resp.statusCode)
-    // }
-    // const respBinId: string = resp.result.metadata.id || 'unknown'
-    // return { id: respBinId, url: this.URL + respBinId }
-    return { id: '', url: this.URL + binId }
+    const resp = await this.client.del<DeleteResponse>(binId)
+    if (resp.result == null) {
+      throw new JsonBinEmptyResponseError(resp.statusCode)
+    }
+    const respBinId: string = resp.result.metadata.id || 'unknown'
+    return { id: respBinId, url: this.URL + respBinId }
   }
 }
