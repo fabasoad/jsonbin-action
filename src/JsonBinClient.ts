@@ -12,7 +12,7 @@ export class JsonBinEmptyResponseError extends JsonBinResponseError {
   }
 }
 
-type GetResponse<T> = {
+type CommonResponse<T> = {
   message?: string,
   record: T,
   metadata: {
@@ -22,15 +22,8 @@ type GetResponse<T> = {
   }
 }
 
-type CreateResponse<T> = {
-  message?: string,
-  record: T,
-  metadata: {
-    id: string,
-    createdAt: string,
-    private: boolean
-  }
-}
+type GetResponse<T> = CommonResponse<T>
+type CreateResponse<T> = CommonResponse<T>
 
 type ReplaceResponse<T> = {
   message?: string,
