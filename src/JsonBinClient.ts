@@ -1,46 +1,46 @@
 import { RestClient } from 'typed-rest-client/RestClient'
 
-// export class JsonBinResponseError extends Error {
-//   constructor(statusCode: number, message: string) {
-//     super(`[${statusCode}] ${message}`)
-//   }
-// }
-//
-// export class JsonBinEmptyResponseError extends JsonBinResponseError {
-//   constructor(statusCode: number) {
-//     super(statusCode, 'Response is empty')
-//   }
-// }
-//
-// type CommonResponse<T> = {
-//   message?: string,
-//   record: T,
-//   metadata: {
-//     id: string,
-//     createdAt: string,
-//     private: boolean
-//   }
-// }
-//
-// type GetResponse<T> = CommonResponse<T>
-// type CreateResponse<T> = CommonResponse<T>
-//
-// type ReplaceResponse<T> = {
-//   message?: string,
-//   record: T,
-//   metadata: {
-//     private: boolean,
-//     parentId: string
-//   }
-// }
-//
-// type DeleteResponse = {
-//   message: string,
-//   metadata: {
-//     id: string,
-//     versionDeleted: number
-//   }
-// }
+export class JsonBinResponseError extends Error {
+  constructor(statusCode: number, message: string) {
+    super(`[${statusCode}] ${message}`)
+  }
+}
+
+export class JsonBinEmptyResponseError extends JsonBinResponseError {
+  constructor(statusCode: number) {
+    super(statusCode, 'Response is empty')
+  }
+}
+
+type CommonResponse<T> = {
+  message?: string,
+  record: T,
+  metadata: {
+    id: string,
+    createdAt: string,
+    private: boolean
+  }
+}
+
+type GetResponse<T> = CommonResponse<T>
+type CreateResponse<T> = CommonResponse<T>
+
+type ReplaceResponse<T> = {
+  message?: string,
+  record: T,
+  metadata: {
+    private: boolean,
+    parentId: string
+  }
+}
+
+type DeleteResponse = {
+  message: string,
+  metadata: {
+    id: string,
+    versionDeleted: number
+  }
+}
 
 export interface JsonBinResponse {
   url: string,
