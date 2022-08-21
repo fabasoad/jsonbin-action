@@ -71,7 +71,7 @@ export default class JsonBinClient {
   }
 
   public async create<T>(body: T): Promise<JsonBinResponse> {
-    // const resp = await this.client.create<CreateResponse<T>>('', body)
+    const resp = await this.client.create<CreateResponse<T>>('', body)
     // if (resp.result == null) {
     //   throw new JsonBinEmptyResponseError(resp.statusCode)
     // } else if (resp.result?.message != null) {
