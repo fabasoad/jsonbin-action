@@ -1,4 +1,4 @@
-import { RestClient } from 'typed-rest-client/RestClient'
+import { RestClient } from 'typed-rest-client/RestClient';
 
 export class JsonBinResponseError extends Error {
   constructor(statusCode: number, message: string) {
