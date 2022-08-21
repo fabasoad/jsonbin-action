@@ -15,12 +15,12 @@ async function run() {
     case 'UPDATE': {
       const body = JSON.parse(getInput('body'))
       result = await client.update<typeof body>(
-          getInput('bin_id'), body)
+        getInput('bin_id'), body)
       break;
     }
     case 'DELETE': {
       result = await client.delete(
-          getInput('bin_id')
+        getInput('bin_id')
       );
       break;
     }
