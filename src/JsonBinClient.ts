@@ -1,5 +1,5 @@
-// import { RestClient } from 'typed-rest-client/RestClient'
-//
+import { RestClient } from 'typed-rest-client/RestClient'
+
 // export class JsonBinResponseError extends Error {
 //   constructor(statusCode: number, message: string) {
 //     super(`[${statusCode}] ${message}`)
@@ -49,14 +49,14 @@ export interface JsonBinResponse {
 
 export default class JsonBinClient {
   private readonly URL: string = 'https://api.jsonbin.io/v3/b/'
-  // private readonly client: RestClient
+  private readonly client: RestClient
 
   constructor(apiKey: string) {
-    // this.client = new RestClient(this.constructor.name, this.URL, [], {
-    //   headers: {
-    //     'X-Master-Key': apiKey
-    //   }
-    // })
+    this.client = new RestClient(this.constructor.name, this.URL, [], {
+      headers: {
+        'X-Master-Key': apiKey
+      }
+    })
   }
 
   public async get<T>(binId: string): Promise<T> {
