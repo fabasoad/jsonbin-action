@@ -9,9 +9,6 @@ on:
       - 'dependabot/**'
       - 'feature-*'
 
-env:
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-
 jobs:
   functional_tests:
     name: Test JSONbin
