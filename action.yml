@@ -27,5 +27,5 @@ outputs:
   url:
     description: 'Access URL to a bin.'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
