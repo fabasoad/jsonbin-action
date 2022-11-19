@@ -5,9 +5,7 @@ on:
   push:
     branches:
       - 'main'
-      - 'fix-*'
-      - 'dependabot/**'
-      - 'feature-*'
+  pull_request:
 
 jobs:
   codeql_tests:
