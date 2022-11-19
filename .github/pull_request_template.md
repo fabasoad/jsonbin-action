@@ -6,7 +6,7 @@ Closes #{IssueNumber}
 
 Please check if your PR fulfills the following requirements:
 
-- [ ] I have read the [CONTRIBUTING](https://github.com/fabasoad/brainfuck-install-action/CONTRIBUTING.md)
+- [ ] I have read the [CONTRIBUTING](https://github.com/fabasoad/jsonbin-action/CONTRIBUTING.md)
 doc.
 - [ ] Tests for the changes have been added (for bug fixes / features).
 - [ ] Docs have been reviewed and added / updated if needed (for bug fixes / features).
