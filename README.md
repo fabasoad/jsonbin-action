@@ -36,7 +36,6 @@ and copy api key to use it in action.
 
 ### Workflow configuration
 
-<!-- markdownlint-disable MD013 -->
 ```yaml
 name: JSONbin
 
@@ -59,7 +58,6 @@ jobs:
           echo "Bin ID = ${{ steps.jsonbin.outputs.bin_id }}"
           echo "URL = ${{ steps.jsonbin.outputs.url }}"
 ```
-<!-- markdownlint-enable MD013 -->
 
 ### Result
 
