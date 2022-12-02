@@ -2,7 +2,6 @@
 
 ![Releases](https://img.shields.io/github/v/release/fabasoad/jsonbin-action?include_prereleases)
 ![Functional Tests](https://github.com/fabasoad/jsonbin-action/workflows/Functional%20Tests/badge.svg)
-![Security Tests](https://github.com/fabasoad/jsonbin-action/workflows/Security%20Tests/badge.svg)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/fabasoad/jsonbin-action/main.svg)](https://results.pre-commit.ci/latest/github/fabasoad/jsonbin-action/main)
 
 This action allows to generate custom HTTP responses using [JSONbin.io](https://jsonbin.io).
