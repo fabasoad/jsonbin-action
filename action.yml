@@ -41,7 +41,7 @@ runs:
           -d '${{ inputs.body }}' \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
-          -H "X-Master-Key: ${{ inputs.api_key }}" \
+          -H 'X-Master-Key: ${{ inputs.api_key }}' \
           -H "X-Bin-Private: true" \
           $URL)
 
@@ -67,7 +67,7 @@ runs:
           -d '${{ inputs.body }}' \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
-          -H "X-Master-Key: ${{ inputs.api_key }}" \
+          -H 'X-Master-Key: ${{ inputs.api_key }}' \
           -H "X-Bin-Versioning: false" \
           $URL/${{ inputs.bin_id }})
 
@@ -90,7 +90,7 @@ runs:
       run: |
         resp=$(curl -X DELETE \
           -w "%{http_code}" \
-          -H "X-Master-Key: ${{ inputs.api_key }}" \
+          -H 'X-Master-Key: ${{ inputs.api_key }}' \
           $URL/${{ inputs.bin_id }})
 
         data=${resp:0:${#resp}-3}
