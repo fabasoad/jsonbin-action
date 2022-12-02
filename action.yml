@@ -45,7 +45,7 @@ runs:
       run: |
         bin_id="${{ fromJson(steps.create.outputs.response).metadata.id }}"
         echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
-        echo "JSONBIN_ACTION_URL=$URL/$bin_id" >> $GITHUB_ENV
+        echo "JSONBIN_ACTION_URL=https://api.jsonbin.io/v3/b/$bin_id" >> $GITHUB_ENV
       shell: bash
     - name: Update JSONbin
       if: ${{ inputs.method == 'UPDATE' }}
