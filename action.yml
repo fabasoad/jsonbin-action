@@ -49,7 +49,7 @@ runs:
       shell: sh
     - name: Update JSONbin
       if: ${{ inputs.method == 'UPDATE' }}
-      id: create
+      id: update
       uses: fjogeleit/http-request-action@v1.12.0
       with:
         url: 'https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}'
@@ -59,7 +59,7 @@ runs:
     - name: Update JSONbin
       if: ${{ inputs.method == 'UPDATE' }}
       run: |
-        bin_id="${{ fromJson(steps.create.outputs.response).metadata.parentId }}"
+        bin_id="${{ fromJson(steps.update.outputs.response).metadata.parentId }}"
         echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
         echo "JSONBIN_ACTION_URL=https://api.jsonbin.io/v3/b/$bin_id" >> $GITHUB_ENV
       shell: sh
