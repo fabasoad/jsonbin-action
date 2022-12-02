@@ -46,33 +46,23 @@ runs:
         bin_id="${{ fromJson(steps.create.outputs.response).metadata.id }}"
         echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
         echo "JSONBIN_ACTION_URL=https://api.jsonbin.io/v3/b/$bin_id" >> $GITHUB_ENV
-      shell: bash
+      shell: sh
     - name: Update JSONbin
       if: ${{ inputs.method == 'UPDATE' }}
-      env:
-        URL: https://api.jsonbin.io/v3/b
+      id: create
+      uses: fjogeleit/http-request-action@v1.12.0
+      with:
+        url: 'https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}'
+        method: 'PUT'
+        customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}", "Accept": "application/json", "X-Bin-Versioning": "false"}'
+        data: '${{ inputs.body }}'
+    - name: Update JSONbin
+      if: ${{ inputs.method == 'UPDATE' }}
       run: |
-        resp=$(curl -X PUT \
-          -w "%{http_code}" \
-          -d '${{ inputs.body }}' \
-          -H "Accept: application/json" \
-          -H "Content-Type: application/json" \
-          -H 'X-Master-Key: ${{ inputs.api_key }}' \
-          -H "X-Bin-Versioning: false" \
-          $URL/${{ inputs.bin_id }})
-
-        data=${resp:0:${#resp}-3}
-        status_code=${resp:${#resp}-3:3}
-
-        if [[ $status_code -lt 200 || $status_code -gt 399 ]]; then
-          message=$(jq -r '.message' <<< "$data")
-          echo "::error::$message" && exit 1
-        fi
-
-        bin_id=$(jq -r '.metadata.parentId' <<< "$data")
+        bin_id="${{ fromJson(steps.create.outputs.response).metadata.parentId }}"
         echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
-        echo "JSONBIN_ACTION_URL=$URL/$bin_id" >> $GITHUB_ENV
-      shell: bash
+        echo "JSONBIN_ACTION_URL=https://api.jsonbin.io/v3/b/$bin_id" >> $GITHUB_ENV
+      shell: sh
     - name: Delete JSONbin
       if: ${{ inputs.method == 'DELETE' }}
       env:
