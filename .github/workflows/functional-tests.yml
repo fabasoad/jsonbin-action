@@ -20,7 +20,7 @@ jobs:
         with:
           body: '{"running_by":"${{ github.actor }}"}'
           method: 'CREATE'
-          api_key: ${{ secrets.API_KEY }}
+          api_key: '${{ secrets.API_KEY }}'
       - name: Validate output
         run: |
           [[ $(expr length "${{ steps.jsonbin_create.outputs.bin_id }}") -eq 0 ]] && exit 1;
@@ -42,7 +42,7 @@ jobs:
           body: '{"author":"${{ github.actor }}"}'
           method: 'UPDATE'
           bin_id: '${{ steps.jsonbin_create.outputs.bin_id }}'
-          api_key: ${{ secrets.API_KEY }}
+          api_key: '${{ secrets.API_KEY }}'
       - name: Call URL that was returned
         uses: fjogeleit/http-request-action@v1.12.0
         id: http2
@@ -59,7 +59,7 @@ jobs:
         with:
           bin_id: '${{ steps.jsonbin_update.outputs.bin_id }}'
           method: 'DELETE'
-          api_key: ${{ secrets.API_KEY }}
+          api_key: '${{ secrets.API_KEY }}'
       - name: Validate URL does not exist
         run: |
           [[ $(curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin_update.outputs.url }}) -eq 404 ]] || exit 1;
