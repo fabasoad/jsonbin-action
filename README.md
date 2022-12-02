@@ -13,8 +13,15 @@ This action allows to generate custom HTTP responses using [JSONbin.io](https://
 
 ## Prerequisites
 
+### API key
+
 Sign up to [JSONbin](https://jsonbin.io) official web page. Then go to [API Keys](https://jsonbin.io/api-keys)
 and copy api key to use it in action.
+
+### Pre-install
+
+The following tools have to be installed for successful work of this GitHub action:
+[bash](https://www.gnu.org/software/bash), [jq](https://stedolan.github.io/jq), [curl](https://curl.se).
 
 ## Inputs
 

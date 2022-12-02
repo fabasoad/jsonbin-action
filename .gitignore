@@ -1,9 +1,4 @@
 .DS_Store
-.nyc_output
 .vscode
-.env
 .envrc
 .idea
-coverage
-node_modules
-yarn-error.log

@@ -12,20 +12,103 @@ inputs:
   body:
     description: 'Body to send in JSON format. In case you want to CREATE or UPDATE bin.'
     required: false
-    default: null
+    default: ""
   method:
     description: 'Type of response that you want to send. Possible values are CREATE, UPDATE, DELETE. Default is CREATE.'
     required: false
-    default: CREATE
+    default: "CREATE"
   bin_id:
     description: 'In case you want to UPDATE or DELETE bin.'
     required: false
-    default: null
+    default: ""
 outputs:
   bin_id:
     description: 'ID of a bin that has been created, updated or deleted.'
+    value: ${{ steps.jsonbin.outputs.bin_id }}
   url:
     description: 'Access URL to a bin.'
+    value: ${{ steps.jsonbin.outputs.url }}
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: 'composite'
+  steps:
+    - name: Create JSONbin
+      if: ${{ inputs.method == 'CREATE' }}
+      env:
+        URL: https://api.jsonbin.io/v3/b
+      run: |
+        resp=$(curl -X POST \
+          -w "%{http_code}" \
+          -d '${{ inputs.body }}' \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -H "X-Master-Key: ${{ inputs.api_key }}" \
+          -H "X-Bin-Private: true" \
+          $URL)
+
+        data=${resp:0:${#resp}-3}
+        status_code=${resp:${#resp}-3:3}
+
+        if [[ $status_code -lt 200 || $status_code -gt 399 ]]; then
+          message=$(jq '.message' <<< "$data")
+          echo "::error::$message" && exit 1
+        fi
+
+        bin_id=$(jq '.metadata.id' <<< "$data")
+        echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
+        echo "JSONBIN_ACTION_URL=$URL/$bin_id" >> $GITHUB_ENV
+      shell: bash
+    - name: Update JSONbin
+      if: ${{ inputs.method == 'UPDATE' }}
+      env:
+        URL: https://api.jsonbin.io/v3/b
+      run: |
+        resp=$(curl -X PUT \
+          -w "%{http_code}" \
+          -d '${{ inputs.body }}' \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -H "X-Master-Key: ${{ inputs.api_key }}" \
+          -H "X-Bin-Versioning: false" \
+          $URL/${{ inputs.bin_id }})
+
+        data=${resp:0:${#resp}-3}
+        status_code=${resp:${#resp}-3:3}
+
+        if [[ $status_code -lt 200 || $status_code -gt 399 ]]; then
+          message=$(jq '.message' <<< "$data")
+          echo "::error::$message" && exit 1
+        fi
+
+        bin_id=$(jq '.metadata.parentId' <<< "$data")
+        echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
+        echo "JSONBIN_ACTION_URL=$URL/$bin_id" >> $GITHUB_ENV
+      shell: bash
+    - name: Delete JSONbin
+      if: ${{ inputs.method == 'DELETE' }}
+      env:
+        URL: https://api.jsonbin.io/v3/b
+      run: |
+        resp=$(curl -X DELETE \
+          -w "%{http_code}" \
+          -H "X-Master-Key: ${{ inputs.api_key }}" \
+          $URL/${{ inputs.bin_id }})
+
+        data=${resp:0:${#resp}-3}
+        status_code=${resp:${#resp}-3:3}
+
+        if [[ $status_code -lt 200 || $status_code -gt 399 ]]; then
+          message=$(jq '.message' <<< "$data")
+          echo "::error::$message" && exit 1
+        fi
+
+        bin_id=$(jq '.metadata.id' <<< "$data")
+        echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
+        echo "JSONBIN_ACTION_URL=$URL/$bin_id" >> $GITHUB_ENV
+      shell: bash
+    - name: Set output
+      if: ${{ inputs.method == 'CREATE' || inputs.method == 'UPDATE' || inputs.method == 'DELETE' }}
+      id: jsonbin
+      run: |
+        echo "bin_id=$JSONBIN_ACTION_BIN_ID" >> $GITHUB_OUTPUT
+        echo "url=$JSONBIN_ACTION_URL" >> $GITHUB_OUTPUT
+      shell: sh
