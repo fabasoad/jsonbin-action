@@ -1,20 +1,22 @@
 # JSONbin
 
 ![Releases](https://img.shields.io/github/v/release/fabasoad/jsonbin-action?include_prereleases)
-![Unit Tests](https://github.com/fabasoad/jsonbin-action/workflows/Unit%20Tests/badge.svg)
 ![Functional Tests](https://github.com/fabasoad/jsonbin-action/workflows/Functional%20Tests/badge.svg)
-![Security Tests](https://github.com/fabasoad/jsonbin-action/workflows/Security%20Tests/badge.svg)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/fabasoad/jsonbin-action/main.svg)](https://results.pre-commit.ci/latest/github/fabasoad/jsonbin-action/main)
-[![Maintainability](https://api.codeclimate.com/v1/badges/4fc4a9e5af837a8ce6a9/maintainability)](https://codeclimate.com/github/fabasoad/jsonbin-action/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/4fc4a9e5af837a8ce6a9/test_coverage)](https://codeclimate.com/github/fabasoad/jsonbin-action/test_coverage)
-[![Known Vulnerabilities](https://snyk.io/test/github/fabasoad/translation-action/badge.svg?targetFile=package.json)](https://snyk.io/test/github/fabasoad/translation-action?targetFile=package.json)
 
 This action allows to generate custom HTTP responses using [JSONbin.io](https://jsonbin.io).
 
 ## Prerequisites
 
+### API key
+
 Sign up to [JSONbin](https://jsonbin.io) official web page. Then go to [API Keys](https://jsonbin.io/api-keys)
 and copy api key to use it in action.
+
+### Pre-install
+
+The following tools have to be installed for successful work of this GitHub action:
+[bash](https://www.gnu.org/software/bash), [jq](https://stedolan.github.io/jq), [curl](https://curl.se).
 
 ## Inputs
 
