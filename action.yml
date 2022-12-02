@@ -49,11 +49,11 @@ runs:
         status_code=${resp:${#resp}-3:3}
 
         if [[ $status_code -lt 200 || $status_code -gt 399 ]]; then
-          message=$(jq '.message' <<< "$data")
+          message=$(jq -r '.message' <<< "$data")
           echo "::error::$message" && exit 1
         fi
 
-        bin_id=$(jq '.metadata.id' <<< "$data")
+        bin_id=$(jq -r '.metadata.id' <<< "$data")
         echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
         echo "JSONBIN_ACTION_URL=$URL/$bin_id" >> $GITHUB_ENV
       shell: bash
@@ -75,11 +75,11 @@ runs:
         status_code=${resp:${#resp}-3:3}
 
         if [[ $status_code -lt 200 || $status_code -gt 399 ]]; then
-          message=$(jq '.message' <<< "$data")
+          message=$(jq -r '.message' <<< "$data")
           echo "::error::$message" && exit 1
         fi
 
-        bin_id=$(jq '.metadata.parentId' <<< "$data")
+        bin_id=$(jq -r '.metadata.parentId' <<< "$data")
         echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
         echo "JSONBIN_ACTION_URL=$URL/$bin_id" >> $GITHUB_ENV
       shell: bash
@@ -97,11 +97,11 @@ runs:
         status_code=${resp:${#resp}-3:3}
 
         if [[ $status_code -lt 200 || $status_code -gt 399 ]]; then
-          message=$(jq '.message' <<< "$data")
+          message=$(jq -r '.message' <<< "$data")
           echo "::error::$message" && exit 1
         fi
 
-        bin_id=$(jq '.metadata.id' <<< "$data")
+        bin_id=$(jq -r '.metadata.id' <<< "$data")
         echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
         echo "JSONBIN_ACTION_URL=$URL/$bin_id" >> $GITHUB_ENV
       shell: bash
