@@ -45,10 +45,8 @@ use them to create an issue and fill all required fields.
 
 ## Use a consistent coding style
 
-Please follow all the rules from [this](https://google.github.io/styleguide/jsguide.html)
-great guide provided by Google for coding style except of following coding styles:
-
-- File names must be all lowercase and may include dashes (-).
+Please follow all the rules from [this](https://google.github.io/styleguide/shellguide.html)
+great guide provided by Google for coding style.
 
 ## License
 
