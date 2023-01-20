@@ -8,24 +8,17 @@ This action allows to generate custom HTTP responses using [JSONbin.io](https://
 
 ## Prerequisites
 
-### API key
-
 Sign up to [JSONbin](https://jsonbin.io) official web page. Then go to [API Keys](https://jsonbin.io/api-keys)
 and copy api key to use it in action.
 
-### Pre-install
-
-The following tools have to be installed for successful work of this GitHub action:
-[bash](https://www.gnu.org/software/bash), [jq](https://stedolan.github.io/jq), [curl](https://curl.se).
-
 ## Inputs
 
-| Name    | Required | Description                                                                                            | Default  | Possible values              |
-|---------|----------|--------------------------------------------------------------------------------------------------------|----------|------------------------------|
-| api_key | Yes      | JSONbin API Key                                                                                        |          | _&lt;string&gt;_             |
-| body    | No       | Body to send in JSON format. In case you want to CREATE or UPDATE bin.                                 | `null`   | _&lt;json&gt;_               |
-| method  | No       | Type of response that you want to send. Possible values are CREATE, UPDATE, DELETE. Default is CREATE. | `CREATE` | `CREATE`, `UPDATE`, `DELETE` |
-| bin_id  | No       | In case you want to UPDATE or DELETE bin.                                                              | `null`   | _&lt;string&gt;_             |
+| Name    | Required | Description                                                           | Default | Possible values                     |
+|---------|----------|-----------------------------------------------------------------------|---------|-------------------------------------|
+| api_key | Yes      | JSONbin API Key                                                       |         | _&lt;string&gt;_                    |
+| body    | No       | Body to send in JSON format. In case you want to CREATE or UPDATE bin | `""`    | _&lt;json&gt;_                      |
+| method  | No       | Type of response that you want to send                                | `GET`   | `GET`, `CREATE`, `UPDATE`, `DELETE` |
+| bin_id  | No       | In case you want to GET, UPDATE or DELETE bin                         | `""`    | _&lt;string&gt;_                    |
 
 ## Outputs
 
