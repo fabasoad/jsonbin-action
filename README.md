@@ -1,5 +1,6 @@
 # JSONbin
 
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 ![Releases](https://img.shields.io/github/v/release/fabasoad/jsonbin-action?include_prereleases)
 ![Functional Tests](https://github.com/fabasoad/jsonbin-action/workflows/Functional%20Tests/badge.svg)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/fabasoad/jsonbin-action/main.svg)](https://results.pre-commit.ci/latest/github/fabasoad/jsonbin-action/main)

@@ -81,8 +81,6 @@ runs:
         method: 'DELETE'
         customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}"}'
     - if: ${{ inputs.method == 'DELETE' }}
-      env:
-        URL: https://api.jsonbin.io/v3/b
       run: |
         bin_id="${{ fromJson(steps.delete.outputs.response).metadata.id }}"
         echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
