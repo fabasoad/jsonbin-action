@@ -25,10 +25,12 @@ and copy api key to use it in action.
 
 ## Outputs
 
+<!-- prettier-ignore-start -->
 | Name   | Required | Description                                           |
-| ------ | -------- | ----------------------------------------------------- |
+|--------|----------|-------------------------------------------------------|
 | bin_id | Yes      | ID of a bin that has been created, updated or deleted |
 | url    | Yes      | Access URL to a bin                                   |
+<!-- prettier-ignore-end -->
 
 ## Example usage
 
