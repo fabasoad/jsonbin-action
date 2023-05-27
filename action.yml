@@ -1,43 +1,43 @@
 ---
-name: 'JSONbin Action'
+name: "JSONbin Action"
 author: Yevhen Fabizhevskyi
-description: 'This action allows to generate custom HTTP responses using JSONbin service.'
+description: "This action allows to generate custom HTTP responses using JSONbin service."
 branding:
   icon: trash
   color: blue
 inputs:
   api_key:
-    description: 'JSONbin API Key.'
+    description: "JSONbin API Key."
     required: true
   body:
-    description: 'Body to send in JSON format. In case you want to CREATE or UPDATE bin.'
+    description: "Body to send in JSON format. In case you want to CREATE or UPDATE bin."
     required: false
     default: ""
   method:
-    description: 'Type of response that you want to send. Possible values are GET, CREATE, UPDATE, DELETE. Default is GET.'
+    description: "Type of response that you want to send. Possible values are GET, CREATE, UPDATE, DELETE. Default is GET."
     required: false
     default: "GET"
   bin_id:
-    description: 'In case you want to UPDATE or DELETE bin.'
+    description: "In case you want to UPDATE or DELETE bin."
     required: false
     default: ""
 outputs:
   bin_id:
-    description: 'ID of a bin that has been created, updated or deleted.'
+    description: "ID of a bin that has been created, updated or deleted."
     value: ${{ steps.jsonbin.outputs.bin_id }}
   url:
-    description: 'Access URL to a bin.'
+    description: "Access URL to a bin."
     value: ${{ steps.jsonbin.outputs.url }}
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Get JSONbin
       if: ${{ inputs.method == 'GET' }}
       id: get
       uses: fjogeleit/http-request-action@v1.14.0
       with:
-        url: 'https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}'
-        method: 'GET'
+        url: "https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}"
+        method: "GET"
         customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}", "Accept": "application/json", "X-Bin-Meta": "true"}'
     - if: ${{ inputs.method == 'GET' }}
       run: |
@@ -49,10 +49,10 @@ runs:
       id: create
       uses: fjogeleit/http-request-action@v1.14.0
       with:
-        url: 'https://api.jsonbin.io/v3/b'
-        method: 'POST'
+        url: "https://api.jsonbin.io/v3/b"
+        method: "POST"
         customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}", "Accept": "application/json", "X-Bin-Private": "true"}'
-        data: '${{ inputs.body }}'
+        data: "${{ inputs.body }}"
     - if: ${{ inputs.method == 'CREATE' }}
       run: |
         bin_id="${{ fromJson(steps.create.outputs.response).metadata.id }}"
@@ -63,10 +63,10 @@ runs:
       id: update
       uses: fjogeleit/http-request-action@v1.14.0
       with:
-        url: 'https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}'
-        method: 'PUT'
+        url: "https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}"
+        method: "PUT"
         customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}", "Accept": "application/json", "X-Bin-Versioning": "false"}'
-        data: '${{ inputs.body }}'
+        data: "${{ inputs.body }}"
     - if: ${{ inputs.method == 'UPDATE' }}
       run: |
         bin_id="${{ fromJson(steps.update.outputs.response).metadata.parentId }}"
@@ -77,8 +77,8 @@ runs:
       id: delete
       uses: fjogeleit/http-request-action@v1.14.0
       with:
-        url: 'https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}'
-        method: 'DELETE'
+        url: "https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}"
+        method: "DELETE"
         customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}"}'
     - if: ${{ inputs.method == 'DELETE' }}
       run: |
