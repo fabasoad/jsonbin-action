@@ -2,8 +2,8 @@
 
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 ![Releases](https://img.shields.io/github/v/release/fabasoad/jsonbin-action?include_prereleases)
-![Functional Tests](https://github.com/fabasoad/jsonbin-action/workflows/Functional%20Tests/badge.svg)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/fabasoad/jsonbin-action/main.svg)](https://results.pre-commit.ci/latest/github/fabasoad/jsonbin-action/main)
+![functional-tests](https://github.com/fabasoad/jsonbin-action/actions/workflows/functional-tests.yml/badge.svg)
+![pre-commit](https://github.com/fabasoad/jsonbin-action/actions/workflows/pre-commit.yml/badge.svg)
 
 This action allows to generate custom HTTP responses using [JSONbin.io](https://jsonbin.io).
 
@@ -14,17 +14,19 @@ and copy api key to use it in action.
 
 ## Inputs
 
+<!-- prettier-ignore-start -->
 | Name    | Required | Description                                                           | Default | Possible values                     |
 |---------|----------|-----------------------------------------------------------------------|---------|-------------------------------------|
 | api_key | Yes      | JSONbin API Key                                                       |         | _&lt;string&gt;_                    |
 | body    | No       | Body to send in JSON format. In case you want to CREATE or UPDATE bin | `""`    | _&lt;json&gt;_                      |
 | method  | No       | Type of response that you want to send                                | `GET`   | `GET`, `CREATE`, `UPDATE`, `DELETE` |
 | bin_id  | No       | In case you want to GET, UPDATE or DELETE bin                         | `""`    | _&lt;string&gt;_                    |
+<!-- prettier-ignore-end -->
 
 ## Outputs
 
 | Name   | Required | Description                                           |
-|--------|----------|-------------------------------------------------------|
+| ------ | -------- | ----------------------------------------------------- |
 | bin_id | Yes      | ID of a bin that has been created, updated or deleted |
 | url    | Yes      | Access URL to a bin                                   |
 
@@ -47,7 +49,7 @@ jobs:
         id: jsonbin
         with:
           body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'
-          method: 'CREATE'
+          method: "CREATE"
           api_key: ${{ secrets.API_KEY }}
       - name: Check bin_id
         run: |
