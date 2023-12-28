@@ -34,7 +34,7 @@ runs:
     - name: Get JSONbin
       if: ${{ inputs.method == 'GET' }}
       id: get
-      uses: fjogeleit/http-request-action@v1.14.1
+      uses: fjogeleit/http-request-action@v1.14.2
       with:
         url: "https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}"
         method: "GET"
@@ -47,7 +47,7 @@ runs:
     - name: Create JSONbin
       if: ${{ inputs.method == 'CREATE' }}
       id: create
-      uses: fjogeleit/http-request-action@v1.14.1
+      uses: fjogeleit/http-request-action@v1.14.2
       with:
         url: "https://api.jsonbin.io/v3/b"
         method: "POST"
@@ -61,7 +61,7 @@ runs:
     - name: Update JSONbin
       if: ${{ inputs.method == 'UPDATE' }}
       id: update
-      uses: fjogeleit/http-request-action@v1.14.1
+      uses: fjogeleit/http-request-action@v1.14.2
       with:
         url: "https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}"
         method: "PUT"
@@ -75,7 +75,7 @@ runs:
     - name: Delete JSONbin
       if: ${{ inputs.method == 'DELETE' }}
       id: delete
-      uses: fjogeleit/http-request-action@v1.14.1
+      uses: fjogeleit/http-request-action@v1.14.2
       with:
         url: "https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}"
         method: "DELETE"
