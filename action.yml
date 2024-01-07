@@ -42,7 +42,7 @@ runs:
     - if: ${{ inputs.method == 'GET' }}
       run: |
         bin_id="${{ fromJson(steps.get.outputs.response).metadata.id }}"
-        echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
+        echo "JSONBIN_ACTION_BIN_ID=${bin_id}" >> "$GITHUB_ENV"
       shell: sh
     - name: Create JSONbin
       if: ${{ inputs.method == 'CREATE' }}
@@ -56,7 +56,7 @@ runs:
     - if: ${{ inputs.method == 'CREATE' }}
       run: |
         bin_id="${{ fromJson(steps.create.outputs.response).metadata.id }}"
-        echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
+        echo "JSONBIN_ACTION_BIN_ID=${bin_id}" >> "$GITHUB_ENV"
       shell: sh
     - name: Update JSONbin
       if: ${{ inputs.method == 'UPDATE' }}
@@ -70,7 +70,7 @@ runs:
     - if: ${{ inputs.method == 'UPDATE' }}
       run: |
         bin_id="${{ fromJson(steps.update.outputs.response).metadata.parentId }}"
-        echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
+        echo "JSONBIN_ACTION_BIN_ID=${bin_id}" >> "$GITHUB_ENV"
       shell: sh
     - name: Delete JSONbin
       if: ${{ inputs.method == 'DELETE' }}
@@ -83,12 +83,12 @@ runs:
     - if: ${{ inputs.method == 'DELETE' }}
       run: |
         bin_id="${{ fromJson(steps.delete.outputs.response).metadata.id }}"
-        echo "JSONBIN_ACTION_BIN_ID=$bin_id" >> $GITHUB_ENV
+        echo "JSONBIN_ACTION_BIN_ID=${bin_id}" >> "$GITHUB_ENV"
       shell: sh
     - name: Set output
       if: ${{ inputs.method == 'GET' || inputs.method == 'CREATE' || inputs.method == 'UPDATE' || inputs.method == 'DELETE' }}
       id: jsonbin
       run: |
-        echo "bin_id=$JSONBIN_ACTION_BIN_ID" >> $GITHUB_OUTPUT
-        echo "url=https://api.jsonbin.io/v3/b/$JSONBIN_ACTION_BIN_ID" >> $GITHUB_OUTPUT
+        echo "bin_id=${JSONBIN_ACTION_BIN_ID}" >> "$GITHUB_OUTPUT"
+        echo "url=https://api.jsonbin.io/v3/b/${JSONBIN_ACTION_BIN_ID}" >> "$GITHUB_OUTPUT"
       shell: sh
