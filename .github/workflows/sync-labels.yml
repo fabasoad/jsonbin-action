@@ -6,6 +6,7 @@ on: # yamllint disable-line rule:truthy
     branches:
       - main
       - dependabot/github_actions/fjogeleit/http-request-action-1.16.0
+      - random1
   workflow_dispatch: {}
 
 jobs:
