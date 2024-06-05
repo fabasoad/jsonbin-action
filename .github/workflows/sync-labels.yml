@@ -11,5 +11,5 @@ on: # yamllint disable-line rule:truthy
 jobs:
   sync-labels:
     name: Labels
-    uses: fabasoad/reusable-workflows/.github/workflows/wf-sync-labels.yml@main
+    uses: fabasoad/reusable-workflows/.github/workflows/wf-sync-labels.yml@fix/sync-labels
     secrets: inherit # pragma: allowlist secret
