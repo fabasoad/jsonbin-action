@@ -3,8 +3,8 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 ![Releases](https://img.shields.io/github/v/release/fabasoad/jsonbin-action?include_prereleases)
 ![functional-tests](https://github.com/fabasoad/jsonbin-action/actions/workflows/functional-tests.yml/badge.svg)
-![security](https://github.com/fabasoad/jsonbin-action/actions/workflows/security.yml/badge.svg)
 ![linting](https://github.com/fabasoad/jsonbin-action/actions/workflows/linting.yml/badge.svg)
+![security](https://github.com/fabasoad/jsonbin-action/actions/workflows/security.yml/badge.svg)
 
 This action allows to generate custom HTTP responses using [JSONbin.io](https://jsonbin.io).
 
