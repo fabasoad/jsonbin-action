@@ -9,4 +9,4 @@ on: # yamllint disable-line rule:truthy
 jobs:
   github:
     name: GitHub
-    uses: fabasoad/reusable-workflows/.github/workflows/wf-github-release.yml@main
+    uses: fabasoad/reusable-workflows/.github/workflows/wf-github-release.yml@bump/actionlint
