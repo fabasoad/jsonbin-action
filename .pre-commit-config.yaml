@@ -1,6 +1,6 @@
 ---
 default_install_hook_types: ["pre-commit", "pre-push"]
-default_stages: ["commit", "push"]
+default_stages: ["pre-commit", "pre-push"]
 minimum_pre_commit_version: 2.18.0
 repos:
   # Linting
@@ -13,15 +13,15 @@ repos:
         types: [text]
         args: []
         # https://github.com/prettier/prettier/releases
-        additional_dependencies: ["prettier@3.3.3"]
-        stages: ["commit"]
+        additional_dependencies: ["prettier@3.4.2"]
+        stages: ["pre-commit"]
   # Security
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.5.0
     hooks:
       - id: detect-secrets
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.20.0
+    rev: v8.21.3
     hooks:
       - id: gitleaks
   - repo: https://github.com/fabasoad/pre-commit-grype
@@ -31,37 +31,37 @@ repos:
         args:
           - --grype-args=--by-cve --fail-on=low
           - --hook-args=--log-level debug
-        stages: ["push"]
+        stages: ["pre-push"]
   # Markdown
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.42.0
+    rev: v0.43.0
     hooks:
       - id: markdownlint-fix
-        stages: ["commit"]
+        stages: ["pre-commit"]
   # Yaml
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.35.1
     hooks:
       - id: yamllint
-        stages: ["push"]
+        stages: ["pre-push"]
   # GitHub Actions
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.3
+    rev: v1.7.4
     hooks:
       - id: actionlint
         args: ["-pyflakes="]
-        stages: ["commit"]
+        stages: ["pre-commit"]
   # Other
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-merge-conflict
       - id: check-json
-        stages: ["push"]
+        stages: ["pre-push"]
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: mixed-line-ending
         args: ["--fix=lf"]
       - id: no-commit-to-branch
-        stages: ["commit"]
+        stages: ["pre-commit"]
       - id: trailing-whitespace
