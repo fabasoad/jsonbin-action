@@ -47,8 +47,8 @@ jobs:
     name: Test JSONbin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
-      - uses: fabasoad/jsonbin-action@main
+      - uses: actions/checkout@v5
+      - uses: fabasoad/jsonbin-action@v2
         id: jsonbin
         with:
           body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'
@@ -66,3 +66,7 @@ jobs:
 Bin ID = 5e93fsb6b08d064dc025e226
 URL = https://api.jsonbin.io/b/5e93fsb6b08d064dc025e226
 ```
+
+## Contributions
+
+![Alt](https://repobeats.axiom.co/api/embed/16ab3ef254bccc6e06141ca75f349053776e522d.svg "Repobeats analytics image")
