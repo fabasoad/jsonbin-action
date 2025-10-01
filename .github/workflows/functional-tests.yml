@@ -34,7 +34,7 @@ jobs:
           [[ $(expr length "${{ steps.jsonbin_create.outputs.bin_id }}") -eq 0 ]] && exit 1;
           [[ "${{ steps.jsonbin_create.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin_create.outputs.bin_id }}" ]] || exit 1;
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.16.4
+        uses: fjogeleit/http-request-action@v1.16.5
         id: http1
         with:
           url: "${{ steps.jsonbin_create.outputs.url }}"
@@ -55,7 +55,7 @@ jobs:
           [[ $(expr length "${{ steps.jsonbin_get.outputs.bin_id }}") -eq 0 ]] && exit 1;
           [[ "${{ steps.jsonbin_get.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin_get.outputs.bin_id }}" ]] || exit 1;
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.16.4
+        uses: fjogeleit/http-request-action@v1.16.5
         id: http2
         with:
           url: "${{ steps.jsonbin_get.outputs.url }}"
@@ -73,7 +73,7 @@ jobs:
           bin_id: "${{ steps.jsonbin_create.outputs.bin_id }}"
           api_key: "${{ secrets.API_KEY }}"
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.16.4
+        uses: fjogeleit/http-request-action@v1.16.5
         id: http3
         with:
           url: "${{ steps.jsonbin_update.outputs.url }}"
