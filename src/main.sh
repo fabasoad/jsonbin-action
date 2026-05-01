@@ -2,7 +2,7 @@
 
 http_get() {
   bin_id="${3}"
-  curl \
+  curl -s \
     -X "GET" \
     -H "X-Master-Key: ${1}" \
     -H "X-Access-Key: ${2}" \
@@ -14,12 +14,13 @@ http_get() {
 
 http_post() {
   body="${3}"
-  curl \
+  curl -s \
     -X "POST" \
     -H "X-Master-Key: ${1}" \
     -H "X-Access-Key: ${2}" \
     -H "X-Bin-Private: true" \
     -H "Accept: application/json" \
+    -H "Content-Type: application/json" \
     -d "${body}" \
     "https://api.jsonbin.io/v3/b" \
     | jq -r '.metadata.id'
@@ -28,12 +29,13 @@ http_post() {
 http_put() {
   bin_id="${3}"
   body="${4}"
-  curl \
+  curl -s \
     -X "PUT" \
     -H "X-Master-Key: ${1}" \
     -H "X-Access-Key: ${2}" \
     -H "X-Bin-Versioning: false" \
     -H "Accept: application/json" \
+    -H "Content-Type: application/json" \
     -d "${body}" \
     "https://api.jsonbin.io/v3/b/${bin_id}" \
     | jq -r '.metadata.parentId'
@@ -41,8 +43,8 @@ http_put() {
 
 http_delete() {
   bin_id="${3}"
-  curl \
-    -X "PUT" \
+  curl -s \
+    -X "DELETE" \
     -H "X-Master-Key: ${1}" \
     -H "X-Access-Key: ${2}" \
     -H "Accept: application/json" \
