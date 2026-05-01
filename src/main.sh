@@ -73,6 +73,8 @@ http_delete() {
 
 main() {
   method="${1}"
+  log_debug "Bin Id: ${4}"
+  log_debug "Body: ${5}"
   shift
   case "${method}" in
     "GET")
