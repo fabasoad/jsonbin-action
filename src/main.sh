@@ -23,6 +23,7 @@ http_get() {
 
 http_post() {
   body="${3}"
+  log_debug "Request body: ${body}"
   resp=$(
     curl -s \
       -X "POST" \
