@@ -26,7 +26,7 @@ jobs:
           persist-credentials: "false"
       - name: Create bin
         uses: ./
-        id: jsonbin_create
+        id: jsonbin-create
         with:
           body: '{"running_by":"${{ github.actor }}"}'
           method: "CREATE"
@@ -34,69 +34,69 @@ jobs:
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
       - name: Validate output
         run: |
-          bin_id="${{ steps.jsonbin_create.outputs.bin-id }}"
+          bin_id="${{ steps.jsonbin-create.outputs.bin-id }}"
           [[ "${#bin_id}" -eq 0 ]] && exit 1;
-          [[ "${{ steps.jsonbin_create.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin_create.outputs.bin-id }}" ]] || exit 1;
+          [[ "${{ steps.jsonbin-create.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin-create.outputs.bin-id }}" ]] || exit 1;
       - name: Call URL that was returned
         uses: fjogeleit/http-request-action@v2
         id: http1
         with:
-          url: "${{ steps.jsonbin_create.outputs.url }}"
+          url: "${{ steps.jsonbin-create.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.API_KEY }}"}'
+          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}"}'
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http1.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
       - name: Get bin
         uses: ./
-        id: jsonbin_get
+        id: jsonbin-get
         with:
-          bin-id: "${{ steps.jsonbin_create.outputs.bin-id }}"
+          bin-id: "${{ steps.jsonbin-create.outputs.bin-id }}"
           method: "GET"
           master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
       - name: Validate output
         run: |
-          bin_id="${{ steps.jsonbin_get.outputs.bin-id }}"
+          bin_id="${{ steps.jsonbin-get.outputs.bin-id }}"
           [[ "${#bin_id}" -eq 0 ]] && exit 1;
-          [[ "${{ steps.jsonbin_get.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin_get.outputs.bin-id }}" ]] || exit 1;
+          [[ "${{ steps.jsonbin-get.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin-get.outputs.bin-id }}" ]] || exit 1;
       - name: Call URL that was returned
         uses: fjogeleit/http-request-action@v2
         id: http2
         with:
-          url: "${{ steps.jsonbin_get.outputs.url }}"
+          url: "${{ steps.jsonbin-get.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.API_KEY }}"}'
+          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}"}'
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http2.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
       - name: Update bin
         uses: ./
-        id: jsonbin_update
+        id: jsonbin-update
         with:
           body: '{"author":"${{ github.actor }}"}'
           method: "UPDATE"
-          bin-id: "${{ steps.jsonbin_create.outputs.bin-id }}"
+          bin-id: "${{ steps.jsonbin-create.outputs.bin-id }}"
           master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
       - name: Call URL that was returned
         uses: fjogeleit/http-request-action@v2
         id: http3
         with:
-          url: "${{ steps.jsonbin_update.outputs.url }}"
+          url: "${{ steps.jsonbin-update.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.API_KEY }}"}'
+          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}"}'
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http3.outputs.response }}')" == '{"author":"${{ github.actor }}"}' ]] || exit 1;
       - name: Delete bin
         uses: ./
-        id: jsonbin_delete
+        id: jsonbin-delete
         with:
-          bin-id: "${{ steps.jsonbin_update.outputs.bin-id }}"
+          bin-id: "${{ steps.jsonbin-update.outputs.bin-id }}"
           method: "DELETE"
           master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
       - name: Validate URL does not exist
         run: |
-          [[ $(curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin_update.outputs.url }}) -eq 404 ]] || exit 1;
+          [[ $(curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin-update.outputs.url }}) -eq 404 ]] || exit 1;
