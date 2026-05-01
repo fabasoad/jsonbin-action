@@ -7,7 +7,8 @@ LIB_DIR_PATH="${SRC_DIR_PATH}/lib"
 . "${LIB_DIR_PATH}/logging.sh"
 
 http_get() {
-  bin_id="${3}"
+  url="https://api.jsonbin.io/v3/b/${3}"
+  log_debug "Request url: ${url}"
   resp=$(
     curl -s \
       -X "GET" \
@@ -15,7 +16,7 @@ http_get() {
       -H "X-Access-Key: ${2}" \
       -H "X-Bin-Meta: true" \
       -H "Accept: application/json" \
-      "https://api.jsonbin.io/v3/b/${bin_id}"
+      "${url}"
   )
   log_debug "Response: ${resp}"
   echo "${resp}" | jq -r '.metadata.id'
@@ -23,6 +24,8 @@ http_get() {
 
 http_post() {
   body="${3}"
+  url="https://api.jsonbin.io/v3/b"
+  log_debug "Request url: ${url}"
   log_debug "Request body: ${body}"
   resp=$(
     curl -s \
@@ -33,15 +36,17 @@ http_post() {
       -H "Accept: application/json" \
       -H "Content-Type: application/json" \
       -d "${body}" \
-      "https://api.jsonbin.io/v3/b"
+      "${url}"
   )
   log_debug "Response: ${resp}"
   echo "${resp}" | jq -r '.metadata.id'
 }
 
 http_put() {
-  bin_id="${3}"
   body="${4}"
+  url="https://api.jsonbin.io/v3/b/${3}"
+  log_debug "Request url: ${url}"
+  log_debug "Request body: ${body}"
   resp=$(
     curl -s \
       -X "PUT" \
@@ -51,21 +56,22 @@ http_put() {
       -H "Accept: application/json" \
       -H "Content-Type: application/json" \
       -d "${body}" \
-      "https://api.jsonbin.io/v3/b/${bin_id}"
+      "${url}"
   )
   log_debug "Response: ${resp}"
   echo "${resp}" | jq -r '.metadata.parentId'
 }
 
 http_delete() {
-  bin_id="${3}"
+  url="https://api.jsonbin.io/v3/b/${3}"
+  log_debug "Request url: ${url}"
   resp=$(
     curl -s \
       -X "DELETE" \
       -H "X-Master-Key: ${1}" \
       -H "X-Access-Key: ${2}" \
       -H "Accept: application/json" \
-      "https://api.jsonbin.io/v3/b/${bin_id}"
+      "${url}"
   )
   log_debug "Response: ${resp}"
   echo "${resp}" | jq -r '.metadata.id'
