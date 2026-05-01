@@ -12,7 +12,14 @@ on: # yamllint disable-line rule:truthy
   schedule:
     # Every Friday at 09:00 JST
     - cron: "0 0 * * 5"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      log-level:
+        description: "Log level:"
+        required: false
+        default: "info"
+        type: choice
+        options: [debug, info, warning, error]
 
 jobs:
   functional-tests:
@@ -32,6 +39,7 @@ jobs:
           method: "CREATE"
           master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
+          log-level: "${{ github.event.inputs.log-level || 'debug' }}"
       - name: Validate output
         run: |
           bin_id="${{ steps.jsonbin-create.outputs.bin-id }}"
@@ -55,6 +63,7 @@ jobs:
           method: "GET"
           master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
+          log-level: "${{ github.event.inputs.log-level || 'debug' }}"
       - name: Validate output
         run: |
           bin_id="${{ steps.jsonbin-get.outputs.bin-id }}"
@@ -79,6 +88,7 @@ jobs:
           bin-id: "${{ steps.jsonbin-create.outputs.bin-id }}"
           master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
+          log-level: "${{ github.event.inputs.log-level || 'debug' }}"
       - name: Call URL that was returned
         uses: fjogeleit/http-request-action@v2
         id: http3
@@ -97,6 +107,7 @@ jobs:
           method: "DELETE"
           master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
+          log-level: "${{ github.event.inputs.log-level || 'debug' }}"
       - name: Validate URL does not exist
         run: |
           [[ $(curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin-update.outputs.url }}) -eq 404 ]] || exit 1;

@@ -24,6 +24,11 @@ inputs:
     description: "In case you want to UPDATE or DELETE bin."
     required: false
     default: ""
+  log-level:
+    description: |
+      Log level of output. Possible options are 'debug', 'info', 'warning' and 'error'.
+    required: false
+    default: info
 outputs:
   bin-id:
     description: "ID of a bin that has been created, updated or deleted."
@@ -52,6 +57,7 @@ runs:
         INPUT_ACCESS_KEY: "${{ inputs.access-key }}"
         INPUT_BIN_ID: "${{ inputs.bin-id }}"
         INPUT_BODY: "${{ inputs.body }}"
+        JSONBIN_LOG_LEVEL: '${{ case(contains(fromJSON(''["debug", "info", "warning", "error"]''), inputs.log-level), inputs.log-level, ''info'') }}'
       run: |
         bin_id=$(
           ${GITHUB_ACTION_PATH}/src/main.sh \
