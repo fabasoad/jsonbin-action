@@ -51,7 +51,7 @@ jobs:
         with:
           url: "${{ steps.jsonbin-create.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}"}'
+          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}", "X-Bin-Meta": "true", "Accept": "application/json"}'
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http1.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
@@ -75,7 +75,7 @@ jobs:
         with:
           url: "${{ steps.jsonbin-get.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}"}'
+          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}", "X-Bin-Meta": "true", "Accept": "application/json"}'
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http2.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
@@ -95,7 +95,7 @@ jobs:
         with:
           url: "${{ steps.jsonbin-update.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}"}'
+          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}", "X-Bin-Meta": "true", "Accept": "application/json"}'
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http3.outputs.response }}')" == '{"author":"${{ github.actor }}"}' ]] || exit 1;
