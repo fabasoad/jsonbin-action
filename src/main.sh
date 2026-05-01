@@ -73,21 +73,23 @@ http_delete() {
 
 main() {
   method="${1}"
-  log_debug "Bin Id: ${4}"
-  log_debug "Body: ${5}"
-  shift
+  master_key="${2}"
+  access_key="${3}"
+  bin_id="${4}"
+  body="${5}"
+
   case "${method}" in
     "GET")
-      http_get "$@"
+      http_get "${master_key}" "${access_key}" "${bin_id}"
       ;;
     "CREATE")
-      http_post "$@"
+      http_post "${master_key}" "${access_key}" "${body}"
       ;;
     "UPDATE")
-      http_put "$@"
+      http_put "${master_key}" "${access_key}" "${bin_id}" "${body}"
       ;;
     "DELETE")
-      http_delete "$@"
+      http_delete "${master_key}" "${access_key}" "${bin_id}"
       ;;
   esac
 }
