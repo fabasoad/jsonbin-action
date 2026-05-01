@@ -71,21 +71,19 @@ http_delete() {
 }
 
 main() {
-  case "${1}" in
+  method="${1}"
+  shift
+  case "${method}" in
     "GET")
-      shift
       http_get "$@"
       ;;
     "CREATE")
-      shift
       http_post "$@"
       ;;
     "UPDATE")
-      shift
       http_put "$@"
       ;;
     "DELETE")
-      shift
       http_delete "$@"
       ;;
   esac
