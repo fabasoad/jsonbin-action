@@ -27,6 +27,16 @@ jobs:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
+      - name: Prepare GET headers
+        id: http-req
+        run: |
+          headers=$(
+            jq -n \
+              --arg mk "${{ secrets.JSONBIN_MASTER_KEY }}" \
+              --arg ak "${{ secrets.JSONBIN_ACCESS_KEY }}" \
+              '{"X-Master-Key": $mk, "X-Access-Key": $ak, "X-Bin-Meta": "true", "Accept": "application/json"}'
+          )
+          echo "headers=${headers}" >> "$GITHUB_OUTPUT"
       - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v6
         with:
@@ -51,7 +61,7 @@ jobs:
         with:
           url: "${{ steps.jsonbin-create.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}", "X-Bin-Meta": "true", "Accept": "application/json"}'
+          customHeaders: "${{ steps.http-req.outputs.headers }}"
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http1.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
@@ -75,7 +85,7 @@ jobs:
         with:
           url: "${{ steps.jsonbin-get.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}", "X-Bin-Meta": "true", "Accept": "application/json"}'
+          customHeaders: "${{ steps.http-req.outputs.headers }}"
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http2.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
@@ -95,7 +105,7 @@ jobs:
         with:
           url: "${{ steps.jsonbin-update.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.JSONBIN_MASTER_KEY }}", "X-Access-Key": "${{ secrets.JSONBIN_ACCESS_KEY }}", "X-Bin-Meta": "true", "Accept": "application/json"}'
+          customHeaders: "${{ steps.http-req.outputs.headers }}"
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http3.outputs.response }}')" == '{"author":"${{ github.actor }}"}' ]] || exit 1;
