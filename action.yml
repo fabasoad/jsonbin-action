@@ -67,7 +67,6 @@ runs:
             "${INPUT_BIN_ID}" \
             "${INPUT_BODY}"
         )
-        echo "Bin Id: ${bin_id}"
         echo "bin-id=${bin_id}" >> "$GITHUB_OUTPUT"
         echo "url=https://api.jsonbin.io/v3/b/${bin_id}" >> "$GITHUB_OUTPUT"
       shell: sh
