@@ -34,6 +34,15 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Fail
+      if: ${{ !contains(fromJSON('["GET", "CREATE", "UPDATE", "DELETE"]'), inputs.method) }}
+      env:
+        INPUT_METHOD: "${{ inputs.method }}"
+      run: |
+        message="${INPUT_METHOD} method is not supported. Allowed values: GET, CREATE, UPDATE, DELETE"
+        echo "::error title=Method is not supported::{message}"
+        exit 1
+      shell: sh
     - name: Send JSONbin request
       if: ${{ contains(fromJSON('["GET", "CREATE", "UPDATE", "DELETE"]'), inputs.method) }}
       id: jsonbin
@@ -52,15 +61,7 @@ runs:
             "${INPUT_BIN_ID}" \
             "${INPUT_BODY}"
         )
+        echo "Bin Id: ${bin_id}"
         echo "bin-id=${bin_id}" >> "$GITHUB_OUTPUT"
         echo "url=https://api.jsonbin.io/v3/b/${bin_id}" >> "$GITHUB_OUTPUT"
-      shell: sh
-    - name: Fail
-      if: ${{ !contains(fromJSON('["GET", "CREATE", "UPDATE", "DELETE"]'), inputs.method) }}
-      env:
-        INPUT_METHOD: "${{ inputs.method }}"
-      run: |
-        message="${INPUT_METHOD} method is not supported. Allowed values: GET, CREATE, UPDATE, DELETE"
-        echo "::error title=Method is not supported::{message}"
-        exit 1
       shell: sh
