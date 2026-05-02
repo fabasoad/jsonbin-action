@@ -12,7 +12,14 @@ on: # yamllint disable-line rule:truthy
   schedule:
     # Every Friday at 09:00 JST
     - cron: "0 0 * * 5"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      log-level:
+        description: "Log level:"
+        required: false
+        default: "info"
+        type: choice
+        options: [debug, info, warning, error]
 
 jobs:
   functional-tests:
@@ -20,77 +27,97 @@ jobs:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
+      - name: Prepare GET headers
+        id: http-req
+        run: |
+          headers=$(
+            jq -cn \
+              --arg mk '${{ secrets.JSONBIN_MASTER_KEY }}' \
+              --arg ak '${{ secrets.JSONBIN_ACCESS_KEY }}' \
+              '{"X-Master-Key": $mk, "X-Access-Key": $ak, "X-Bin-Meta": "true", "Accept": "application/json"}'
+          )
+          echo "headers=${headers}" >> "$GITHUB_OUTPUT"
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: "false"
       - name: Create bin
         uses: ./
-        id: jsonbin_create
+        id: jsonbin-create
         with:
           body: '{"running_by":"${{ github.actor }}"}'
           method: "CREATE"
-          api_key: "${{ secrets.API_KEY }}"
+          master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
+          access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
+          log-level: "${{ github.event.inputs.log-level || 'info' }}"
       - name: Validate output
         run: |
-          bin_id="${{ steps.jsonbin_create.outputs.bin_id }}"
+          bin_id="${{ steps.jsonbin-create.outputs.bin-id }}"
           [[ "${#bin_id}" -eq 0 ]] && exit 1;
-          [[ "${{ steps.jsonbin_create.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin_create.outputs.bin_id }}" ]] || exit 1;
+          [[ "${{ steps.jsonbin-create.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin-create.outputs.bin-id }}" ]] || exit 1;
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.16.5
+        uses: fjogeleit/http-request-action@v2
         id: http1
         with:
-          url: "${{ steps.jsonbin_create.outputs.url }}"
+          url: "${{ steps.jsonbin-create.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.API_KEY }}"}'
+          customHeaders: "${{ steps.http-req.outputs.headers }}"
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http1.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
       - name: Get bin
         uses: ./
-        id: jsonbin_get
+        id: jsonbin-get
         with:
-          bin_id: "${{ steps.jsonbin_create.outputs.bin_id }}"
+          bin-id: "${{ steps.jsonbin-create.outputs.bin-id }}"
           method: "GET"
-          api_key: "${{ secrets.API_KEY }}"
+          master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
+          access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
+          log-level: "${{ github.event.inputs.log-level || 'info' }}"
       - name: Validate output
         run: |
-          bin_id="${{ steps.jsonbin_get.outputs.bin_id }}"
+          bin_id="${{ steps.jsonbin-get.outputs.bin-id }}"
           [[ "${#bin_id}" -eq 0 ]] && exit 1;
-          [[ "${{ steps.jsonbin_get.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin_get.outputs.bin_id }}" ]] || exit 1;
+          [[ "${{ steps.jsonbin-get.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin-get.outputs.bin-id }}" ]] || exit 1;
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.16.5
+        uses: fjogeleit/http-request-action@v2
         id: http2
         with:
-          url: "${{ steps.jsonbin_get.outputs.url }}"
+          url: "${{ steps.jsonbin-get.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.API_KEY }}"}'
+          customHeaders: "${{ steps.http-req.outputs.headers }}"
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http2.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
       - name: Update bin
         uses: ./
-        id: jsonbin_update
+        id: jsonbin-update
         with:
           body: '{"author":"${{ github.actor }}"}'
           method: "UPDATE"
-          bin_id: "${{ steps.jsonbin_create.outputs.bin_id }}"
-          api_key: "${{ secrets.API_KEY }}"
+          bin-id: "${{ steps.jsonbin-create.outputs.bin-id }}"
+          master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
+          access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
+          log-level: "${{ github.event.inputs.log-level || 'info' }}"
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v1.16.5
+        uses: fjogeleit/http-request-action@v2
         id: http3
         with:
-          url: "${{ steps.jsonbin_update.outputs.url }}"
+          url: "${{ steps.jsonbin-update.outputs.url }}"
           method: "GET"
-          customHeaders: '{"X-Master-Key": "${{ secrets.API_KEY }}"}'
+          customHeaders: "${{ steps.http-req.outputs.headers }}"
       - name: Validate response
         run: |
           [[ "$(jq -c '.record' <<< '${{ steps.http3.outputs.response }}')" == '{"author":"${{ github.actor }}"}' ]] || exit 1;
       - name: Delete bin
         uses: ./
-        id: jsonbin_delete
+        id: jsonbin-delete
         with:
-          bin_id: "${{ steps.jsonbin_update.outputs.bin_id }}"
+          bin-id: "${{ steps.jsonbin-update.outputs.bin-id }}"
           method: "DELETE"
-          api_key: "${{ secrets.API_KEY }}"
+          master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
+          access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
+          log-level: "${{ github.event.inputs.log-level || 'info' }}"
       - name: Validate URL does not exist
         run: |
-          [[ $(curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin_update.outputs.url }}) -eq 404 ]] || exit 1;
+          [[ $(curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin-update.outputs.url }}) -eq 404 ]] || exit 1;

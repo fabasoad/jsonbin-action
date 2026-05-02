@@ -6,8 +6,11 @@ branding:
   icon: trash
   color: blue
 inputs:
-  api_key:
-    description: "JSONbin API Key."
+  master-key:
+    description: "JSONbin Master Key."
+    required: true
+  access-key:
+    description: "JSONbin Access Key."
     required: true
   body:
     description: "Body to send in JSON format. In case you want to CREATE or UPDATE bin."
@@ -17,78 +20,53 @@ inputs:
     description: "Type of response that you want to send. Possible values are GET, CREATE, UPDATE, DELETE. Default is GET."
     required: false
     default: "GET"
-  bin_id:
+  bin-id:
     description: "In case you want to UPDATE or DELETE bin."
     required: false
     default: ""
+  log-level:
+    description: |
+      Log level of output. Possible options are 'debug', 'info', 'warning' and 'error'.
+    required: false
+    default: info
 outputs:
-  bin_id:
+  bin-id:
     description: "ID of a bin that has been created, updated or deleted."
-    value: ${{ steps.jsonbin.outputs.bin_id }}
+    value: ${{ steps.jsonbin.outputs.bin-id }}
   url:
     description: "Access URL to a bin."
     value: ${{ steps.jsonbin.outputs.url }}
 runs:
   using: "composite"
   steps:
-    - name: Get JSONbin
-      if: ${{ inputs.method == 'GET' }}
-      id: get
-      uses: fjogeleit/http-request-action@v1.16.5
-      with:
-        url: "https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}"
-        method: "GET"
-        customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}", "Accept": "application/json", "X-Bin-Meta": "true"}'
-    - if: ${{ inputs.method == 'GET' }}
+    - name: Fail
+      if: ${{ !contains(fromJSON('["GET", "CREATE", "UPDATE", "DELETE"]'), inputs.method) }}
+      env:
+        INPUT_METHOD: "${{ inputs.method }}"
       run: |
-        bin_id="${{ fromJson(steps.get.outputs.response).metadata.id }}"
-        echo "JSONBIN_ACTION_BIN_ID=${bin_id}" >> "$GITHUB_ENV"
+        message="${INPUT_METHOD} method is not supported. Allowed values: GET, CREATE, UPDATE, DELETE"
+        echo "::error title=Method is not supported::{message}"
+        exit 1
       shell: sh
-    - name: Create JSONbin
-      if: ${{ inputs.method == 'CREATE' }}
-      id: create
-      uses: fjogeleit/http-request-action@v1.16.5
-      with:
-        url: "https://api.jsonbin.io/v3/b"
-        method: "POST"
-        customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}", "Accept": "application/json", "X-Bin-Private": "true"}'
-        data: "${{ inputs.body }}"
-    - if: ${{ inputs.method == 'CREATE' }}
-      run: |
-        bin_id="${{ fromJson(steps.create.outputs.response).metadata.id }}"
-        echo "JSONBIN_ACTION_BIN_ID=${bin_id}" >> "$GITHUB_ENV"
-      shell: sh
-    - name: Update JSONbin
-      if: ${{ inputs.method == 'UPDATE' }}
-      id: update
-      uses: fjogeleit/http-request-action@v1.16.5
-      with:
-        url: "https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}"
-        method: "PUT"
-        customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}", "Accept": "application/json", "X-Bin-Versioning": "false"}'
-        data: "${{ inputs.body }}"
-    - if: ${{ inputs.method == 'UPDATE' }}
-      run: |
-        bin_id="${{ fromJson(steps.update.outputs.response).metadata.parentId }}"
-        echo "JSONBIN_ACTION_BIN_ID=${bin_id}" >> "$GITHUB_ENV"
-      shell: sh
-    - name: Delete JSONbin
-      if: ${{ inputs.method == 'DELETE' }}
-      id: delete
-      uses: fjogeleit/http-request-action@v1.16.5
-      with:
-        url: "https://api.jsonbin.io/v3/b/${{ inputs.bin_id }}"
-        method: "DELETE"
-        customHeaders: '{"X-Master-Key": "${{ inputs.api_key }}"}'
-    - if: ${{ inputs.method == 'DELETE' }}
-      run: |
-        bin_id="${{ fromJson(steps.delete.outputs.response).metadata.id }}"
-        echo "JSONBIN_ACTION_BIN_ID=${bin_id}" >> "$GITHUB_ENV"
-      shell: sh
-    - name: Set output
-      if: ${{ inputs.method == 'GET' || inputs.method == 'CREATE' || inputs.method == 'UPDATE' || inputs.method == 'DELETE' }}
+    - name: Send JSONbin request
+      if: ${{ contains(fromJSON('["GET", "CREATE", "UPDATE", "DELETE"]'), inputs.method) }}
       id: jsonbin
+      env:
+        INPUT_METHOD: "${{ inputs.method }}"
+        INPUT_MASTER_KEY: "${{ inputs.master-key }}"
+        INPUT_ACCESS_KEY: "${{ inputs.access-key }}"
+        INPUT_BIN_ID: "${{ inputs.bin-id }}"
+        INPUT_BODY: "${{ inputs.body }}"
+        JSONBIN_LOG_LEVEL: '${{ case(contains(fromJSON(''["debug", "info", "warning", "error"]''), inputs.log-level), inputs.log-level, ''info'') }}'
       run: |
-        echo "bin_id=${JSONBIN_ACTION_BIN_ID}" >> "$GITHUB_OUTPUT"
-        echo "url=https://api.jsonbin.io/v3/b/${JSONBIN_ACTION_BIN_ID}" >> "$GITHUB_OUTPUT"
+        bin_id=$(
+          ${GITHUB_ACTION_PATH}/src/main.sh \
+            "${INPUT_METHOD}" \
+            "${INPUT_MASTER_KEY}" \
+            "${INPUT_ACCESS_KEY}" \
+            "${INPUT_BIN_ID}" \
+            "${INPUT_BODY}"
+        )
+        echo "bin-id=${bin_id}" >> "$GITHUB_OUTPUT"
+        echo "url=https://api.jsonbin.io/v3/b/${bin_id}" >> "$GITHUB_OUTPUT"
       shell: sh

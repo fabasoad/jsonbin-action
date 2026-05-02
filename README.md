@@ -16,12 +16,13 @@ and copy api key to use it in action.
 ## Inputs
 
 <!-- prettier-ignore-start -->
-| Name    | Required | Description                                                           | Default | Possible values                     |
-|---------|----------|-----------------------------------------------------------------------|---------|-------------------------------------|
-| api_key | Yes      | JSONbin API Key                                                       |         | _&lt;string&gt;_                    |
-| body    | No       | Body to send in JSON format. In case you want to CREATE or UPDATE bin | `""`    | _&lt;json&gt;_                      |
-| method  | No       | Type of response that you want to send                                | `GET`   | `GET`, `CREATE`, `UPDATE`, `DELETE` |
-| bin_id  | No       | In case you want to GET, UPDATE or DELETE bin                         | `""`    | _&lt;string&gt;_                    |
+| Name       | Required | Description                                                           | Default | Possible values                     |
+|------------|----------|-----------------------------------------------------------------------|---------|-------------------------------------|
+| master-key | Yes      | JSONbin Master Key                                                    |         | _&lt;string&gt;_                    |
+| access-key | Yes      | JSONbin Access Key                                                    |         | _&lt;string&gt;_                    |
+| body       | No       | Body to send in JSON format. In case you want to CREATE or UPDATE bin | `""`    | _&lt;json&gt;_                      |
+| method     | No       | Type of response that you want to send                                | `GET`   | `GET`, `CREATE`, `UPDATE`, `DELETE` |
+| bin-id     | No       | In case you want to GET, UPDATE or DELETE bin                         | `""`    | _&lt;string&gt;_                    |
 <!-- prettier-ignore-end -->
 
 ## Outputs
@@ -29,7 +30,7 @@ and copy api key to use it in action.
 <!-- prettier-ignore-start -->
 | Name   | Required | Description                                           |
 |--------|----------|-------------------------------------------------------|
-| bin_id | Yes      | ID of a bin that has been created, updated or deleted |
+| bin-id | Yes      | ID of a bin that has been created, updated or deleted |
 | url    | Yes      | Access URL to a bin                                   |
 <!-- prettier-ignore-end -->
 
@@ -47,16 +48,17 @@ jobs:
     name: Test JSONbin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: fabasoad/jsonbin-action@v2
+      - uses: actions/checkout@v6
+      - uses: fabasoad/jsonbin-action@v3
         id: jsonbin
         with:
           body: '{"workflow": "${{ github.workflow }}", "author": "${{ github.actor }}", "number": "${{ github.run_number }}"}'
           method: "CREATE"
-          api_key: ${{ secrets.API_KEY }}
-      - name: Check bin_id
+          master-key: "${{ secrets.JSONBIN_MASTER_KEY }}"
+          access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
+      - name: Check bin-id
         run: |
-          echo "Bin ID = ${{ steps.jsonbin.outputs.bin_id }}"
+          echo "Bin ID = ${{ steps.jsonbin.outputs.bin-id }}"
           echo "URL = ${{ steps.jsonbin.outputs.url }}"
 ```
 
