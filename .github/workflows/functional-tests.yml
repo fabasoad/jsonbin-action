@@ -24,8 +24,10 @@ on: # yamllint disable-line rule:truthy
 jobs:
   functional-tests:
     name: Test JSONbin
-    timeout-minutes: 5
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
     steps:
       - name: Prepare GET headers
         id: http-req
@@ -38,7 +40,7 @@ jobs:
           )
           echo "headers=${headers}" >> "$GITHUB_OUTPUT"
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           persist-credentials: "false"
       - name: Create bin
@@ -51,20 +53,24 @@ jobs:
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
           log-level: "${{ github.event.inputs.log-level || 'info' }}"
       - name: Validate output
+        env:
+          STEP_JSONBIN_CREATE_OUTPUT_BIN_ID: "${{ steps.jsonbin-create.outputs.bin-id }}"
+          STEP_JSONBIN_CREATE_OUTPUT_URL: "${{ steps.jsonbin-create.outputs.url }}"
         run: |
-          bin_id="${{ steps.jsonbin-create.outputs.bin-id }}"
-          [[ "${#bin_id}" -eq 0 ]] && exit 1;
-          [[ "${{ steps.jsonbin-create.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin-create.outputs.bin-id }}" ]] || exit 1;
+          [[ "${#STEP_JSONBIN_CREATE_OUTPUT_BIN_ID}" -eq 0 ]] && exit 1;
+          [[ "${STEP_JSONBIN_CREATE_OUTPUT_URL}" == "https://api.jsonbin.io/v3/b/${STEP_JSONBIN_CREATE_OUTPUT_BIN_ID}" ]] || exit 1;
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v2
+        uses: fjogeleit/http-request-action@f98bb26551cd1af7d3eb2674578a80754ece88db # v2.0.1
         id: http1
         with:
           url: "${{ steps.jsonbin-create.outputs.url }}"
           method: "GET"
           customHeaders: "${{ steps.http-req.outputs.headers }}"
       - name: Validate response
+        env:
+          STEP_HTTP1_OUTPUT_RESPONSE: "${{ steps.http1.outputs.response }}"
         run: |
-          [[ "$(jq -c '.record' <<< '${{ steps.http1.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
+          [[ "$(jq -c '.record' <<< "${STEP_HTTP1_OUTPUT_RESPONSE}")" == "{\"running_by\":\"${GITHUB_ACTOR}\"}" ]] || exit 1;
       - name: Get bin
         uses: ./
         id: jsonbin-get
@@ -75,20 +81,24 @@ jobs:
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
           log-level: "${{ github.event.inputs.log-level || 'info' }}"
       - name: Validate output
+        env:
+          STEP_JSONBIN_GET_OUTPUT_BIN_ID: "${{ steps.jsonbin-get.outputs.bin-id }}"
+          STEP_JSONBIN_GET_OUTPUT_URL: "${{ steps.jsonbin-get.outputs.url }}"
         run: |
-          bin_id="${{ steps.jsonbin-get.outputs.bin-id }}"
-          [[ "${#bin_id}" -eq 0 ]] && exit 1;
-          [[ "${{ steps.jsonbin-get.outputs.url }}" == "https://api.jsonbin.io/v3/b/${{ steps.jsonbin-get.outputs.bin-id }}" ]] || exit 1;
+          [[ "${#STEP_JSONBIN_GET_OUTPUT_BIN_ID}" -eq 0 ]] && exit 1;
+          [[ "${STEP_JSONBIN_GET_OUTPUT_URL}" == "https://api.jsonbin.io/v3/b/${STEP_JSONBIN_GET_OUTPUT_BIN_ID}" ]] || exit 1;
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v2
+        uses: fjogeleit/http-request-action@f98bb26551cd1af7d3eb2674578a80754ece88db # v2.0.1
         id: http2
         with:
           url: "${{ steps.jsonbin-get.outputs.url }}"
           method: "GET"
           customHeaders: "${{ steps.http-req.outputs.headers }}"
       - name: Validate response
+        env:
+          STEP_HTTP2_OUTPUT_RESPONSE: "${{ steps.http2.outputs.response }}"
         run: |
-          [[ "$(jq -c '.record' <<< '${{ steps.http2.outputs.response }}')" == '{"running_by":"${{ github.actor }}"}' ]] || exit 1;
+          [[ "$(jq -c '.record' <<< "${STEP_HTTP2_OUTPUT_RESPONSE}")" == "{\"running_by\":\"${GITHUB_ACTOR}\"}" ]] || exit 1;
       - name: Update bin
         uses: ./
         id: jsonbin-update
@@ -100,15 +110,17 @@ jobs:
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
           log-level: "${{ github.event.inputs.log-level || 'info' }}"
       - name: Call URL that was returned
-        uses: fjogeleit/http-request-action@v2
+        uses: fjogeleit/http-request-action@f98bb26551cd1af7d3eb2674578a80754ece88db # v2.0.1
         id: http3
         with:
           url: "${{ steps.jsonbin-update.outputs.url }}"
           method: "GET"
           customHeaders: "${{ steps.http-req.outputs.headers }}"
       - name: Validate response
+        env:
+          STEP_HTTP3_OUTPUT_RESPONSE: "${{ steps.http3.outputs.response }}"
         run: |
-          [[ "$(jq -c '.record' <<< '${{ steps.http3.outputs.response }}')" == '{"author":"${{ github.actor }}"}' ]] || exit 1;
+          [[ "$(jq -c '.record' <<< "${STEP_HTTP3_OUTPUT_RESPONSE}")" == "{\"author\":\"${GITHUB_ACTOR}\"}" ]] || exit 1;
       - name: Delete bin
         uses: ./
         id: jsonbin-delete
@@ -119,5 +131,7 @@ jobs:
           access-key: "${{ secrets.JSONBIN_ACCESS_KEY }}"
           log-level: "${{ github.event.inputs.log-level || 'info' }}"
       - name: Validate URL does not exist
+        env:
+          STEP_JSONBIN_UPDATE_OUTPUT_URL: "${{ steps.jsonbin-update.outputs.url }}"
         run: |
-          [[ $(curl -s -o /dev/null -w "%{http_code}" ${{ steps.jsonbin-update.outputs.url }}) -eq 404 ]] || exit 1;
+          [[ $(curl -s -o /dev/null -w "%{http_code}" "${STEP_JSONBIN_UPDATE_OUTPUT_URL}") -eq 404 ]] || exit 1;

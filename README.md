@@ -48,7 +48,7 @@ jobs:
     name: Test JSONbin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: fabasoad/jsonbin-action@v3
         id: jsonbin
         with:
